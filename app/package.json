@@ -1,0 +1,58 @@
+{
+  "name": "hostic",
+  "version": "0.9.0",
+  "description": "Yet another static web site generator",
+  "private": true,
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --no-cache"
+  },
+  "author": {
+    "name": "Dirk Holtwick",
+    "email": "dirk.holtwick@gmail.com",
+    "url": "https://holtwick.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holtwick/hostic.git"
+  },
+  "license": "MIT",
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "./src/jest-transform.js"
+    },
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "node_modules/",
+      "dist/"
+    ]
+  },
+  "bin": {
+    "hostic": "./src/cli.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "chokidar": "^3.4.2",
+    "css-what": "^3.3.0",
+    "debug": "^4.1.1",
+    "esbuild": "^0.6.28",
+    "express": "^4.17.1",
+    "he": "^1.2.0",
+    "highlight.js": "^10.1.2",
+    "htmlparser2": "^4.1.0",
+    "image-size": "^0.8.3",
+    "jest": "^26.4.2",
+    "lodash": "^4.17.20",
+    "marked": "^1.1.1",
+    "mime-types": "^2.1.27",
+    "minimatch": "^3.0.4",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "source-map-support": "^0.5.19",
+    "uuid": "^8.3.0",
+    "yaml": "^1.10.0"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}

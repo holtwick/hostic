@@ -1,0 +1,23 @@
+{
+  "name": "create-hostic",
+  "version": "0.9.0",
+  "description": "Creates a static web site powered by Hostic",
+  "main": "index.js",
+  "bin": {
+    "create-hostic": "index.js"
+  },
+  "author": {
+    "name": "Dirk Holtwick",
+    "email": "dirk.holtwick@gmail.com",
+    "url": "https://holtwick.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holtwick/hostic.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "fs-extra": "^9.0.1",
+    "minimist": "^1.2.5"
+  }
+}

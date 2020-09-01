@@ -1,0 +1,79 @@
+.video-wrapper {
+  position: relative;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  padding-bottom: 56.25% !important;
+}
+.video-wrapper .video-embed-item {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-wrapper > video {
+  width: 100%;
+  vertical-align: middle;
+}
+.video-wrapper > video.has-media-controls-hidden::-webkit-media-controls {
+  display: none;
+}
+.video-wrapper a {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+.video-wrapper a * {
+  display: none;
+}
+.video-wrapper .video-overlay-content {
+  pointer-events: none;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.95;
+  cursor: pointer;
+  background-image: linear-gradient(transparent, #000000);
+  transition: opacity 150ms;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.video-wrapper .video-overlay-content * {
+  pointer-events: none;
+}
+.video-wrapper .video-overlay-content div {
+  width: 100%;
+}
+.video-wrapper .video-overlay-content div svg {
+  width: 100px;
+  height: 100px;
+}
+.video-wrapper .video-overlay-content div div {
+  padding-top: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+.video-wrapper .video-overlay-play-button:hover {
+  opacity: 1;
+}
+.video-wrapper .video-overlay-play-button.is-hidden {
+  display: none;
+}

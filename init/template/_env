@@ -1,0 +1,3 @@
+OUTPUT_FOLDER = dist
+
+PORT = 8080

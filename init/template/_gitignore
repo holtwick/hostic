@@ -1,0 +1,27 @@
+# HOSTIC .gitignore remommendations
+
+# The `npm run build` command writes to this folder
+# You can also choose to include those into git to have
+# a better reference for changes
+
+dist
+
+# Hostic will write temporary data into this folder
+
+.hostic
+
+# `.env` holds settings for hostic
+# `.env.local` does the same, but usually is not included into Git,
+# therefore it is a good place for confidential settings like passwords
+
+.env.local
+
+
+# ---
+
+
+# This is the usual stuff that gets excluded
+
+.DS_Store
+node_modules
+

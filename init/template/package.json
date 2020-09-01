@@ -1,0 +1,12 @@
+{
+  "name": "hostic-starter",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "npm run serve",
+    "serve": "hostic serve",
+    "build": "hostic build"
+  },
+  "devDependencies": {
+    "hostic": "^0.9.0"
+  }
+}

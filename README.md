@@ -4,16 +4,16 @@
 
 **Yet another static web site builder**
 
-There are plenty static web site generators around, but many of them *think* for you or try to make use of a specific framework on all costs. Hostic in contrary was built from the ground to use the optimal tools for the task while keeping the process pleasant. 
+There are plenty static web site generators around, but many of them *think for you* or try to make use of a specific framework on all costs. Hostic in contrary was built from the ground to use the optimal tools for the task while keeping the process pleasant. 
 
 Some features:
 
 - **Supports JSX** but is not related to any framework like React, Vue or Svelte
-- Implements a light way DOM abstraction to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
+- Implements a light way DOM abstraction (VDOM) to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
 - **Real time preview** with self reloading pages. Experiment with different designs or contents.
 - **Any file type** can be created like XML sitemaps of RSS feeds, robots.txt or whatever you need
 - Great **Markdown support**: Write your articles using Markdown and refer to assets used in it. Hostic puts it all together. Works great with [OnePile.app](https://onepile.app?ref=hostic&kw=github).
-- **Plugins** help doing common repetitive tasks with ease
+- **Plugins and Middleware** help doing common repetitive tasks with ease
 - **SEO**: Static pages load fast. All assets are tagged with a SHA checksum, therefore the caching on the server can be set to infinite. Perfect sitemap generation done by a plugin. Post processing can reduce file sizes or optimize per page like stripping unused CSS.
 - **Fast page load** due to the static nature of the output. Nothing is in between and you can optimize for best loading performance on your server.
 
@@ -93,6 +93,10 @@ site.html('/', template, async ctx => {
   ctx.body = <div>My content for the template</div>
 })
 ```
+
+## Context
+
+The context that is passed to Middleware is important. The most important property of it is `body`. It holds the content of the page. For HTML and XML usually in form of a VDOM. But it can also be used to pass properties to other Middlewares, like `lang` for language or `title` for the page title.
 
 ## Plugins
 
@@ -181,14 +185,34 @@ Translations can be provided as simple objects like:
 }
 ```
 
-## Virtual DOM
+## Virtual DOM (VDOM)
 
 This DOM abstraction for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
 
-## Page Structure
+## Static Files
 
-- `body`: The content of the page, can be any object of function, even a `Promise`
-- `type`: MIME type of page. `text/html` and `text/xml` receive special handling including VDOM support. `text/plain` can also receive an array representing lines in the text document. `text/json` transforms objects as expected.
+Serving static files:
+
+- `site.static('favicon.ico')`: Serve file at `/favicon.ico`
+- `site.static('assets`): Serve folder `/assets`
+- `site.static('css/style.css', 'assets/style.css')`: Serve file `assets/style.css` under `/css/style.css`
+
+## Markdown
+
+As for most static site generators Markdown is a welcome format for content. The first part describes properties in YAML and the second part the textual content:
+
+```markdown
+---
+title: Example
+lang: en
+---
+
+# Example of a Page
+
+Lorem ipsum
+```
+
+(more details to be added)
 
 ## Lazy Loading and Multiple Passes 
 
@@ -225,7 +249,6 @@ The top level of configuration are environment variables. You can set them in yo
 Available settings are:
 
 - `BASE_URL=https://holtwick.de` - The base URL that is required to calculate absolute URLs e.g. for canonical URL or alternative languages meta data, but also for sitemaps and the like. For the preview server this will be automatically set to the appropriate `localhost` address. This is especially useful if you are building for different targets like `stage` and `production`. 
-
 - `PORT=8080` - The preview servers port number 
 
 ## Performance {#performance}
@@ -238,7 +261,7 @@ Fast previews and build processes are a great thing to have if you are working w
 
 ## Be aware of ...
 
-- All resulting URL paths are absolute
+- All resulting URL paths are absolute. HTML files have no `.html` extension.
 - All paths in JS and JSX have to be absolute from the site's origin, those from Markdown files can also be releative.
 - You cannot use `__dirname` because code is transpiled to a monolithic JS file that lives in `.hostic` folder.
 - LESS or SCSS transform is not supported nor other optimizations that an IDE like IntelliJ can provide out of the box as well. If you want to have it please contribute or support.
@@ -248,30 +271,5 @@ Fast previews and build processes are a great thing to have if you are working w
 Read about it in [my blog](https://holtwick.de/blog/).
 
 I don't know... there are plenty of good tools around. But I stumbled into creating this one and then got fascinated by [esbuild](https://github.com/evanw/esbuild), [vite](https://github.com/vitejs/vite), the own virtual DOM and other details that where interesting to implement. For non geeky people it might be easier to start with something from the shelf like [11ty](https://www.11ty.dev/).
-
----
-
-### site.static
-
-- `site.static('favicon.ico')`: Serve file at `/favicon.ico`
-- `site.static('assets`): Serve folder `/assets`
-- `site.static('css/style.css', 'assets/style.css')`: Serve file `assets/style.css` under `/css/style.css`
-
-### site.html
-
-```
-site.html('/', ctx => {
-    ctx.body = 'Hello World'
-})
-```
-
-
-```
-site.html('/', { title: 'Welcome' }, template, ctx => {
-    ctx.body = 'Hello World'
-})
-```
-
-### Plugins
 
 

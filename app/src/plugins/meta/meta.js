@@ -22,7 +22,7 @@ export function meta(pluginOpt = {}) {
   // https://ogp.me/#types
 
   return {
-    name: 'youtube',
+    name: 'meta',
     priority: 0.55,
     type: TYPE_HTML,
     middleware: async (ctx, next) => {

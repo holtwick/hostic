@@ -28,6 +28,20 @@ npm i
 npm start
 ```
 
+To **build** the static version into the `dist` folder:
+
+```sh
+npm run build
+```
+
+To **preview and develop** your site:
+
+```sh
+npm start
+```
+
+Open your browser at <http://localhost:8080>. The browser will reload after any change you saved to your project.
+
 ## Site
 
 Creating a new site starts with an entry file usually `site/index.js`. This one only export one default function that takes a `path` argument:
@@ -54,7 +68,7 @@ As you noted the Context `ctx` contains data and can receive new data as well fo
 
 ## Middleware
 
-Hostic makes use of the *middleware programming pattern* as known from Koa.js or Express.js. Complexity and extensibility can quite elgantly be managed this way.
+Hostic makes use of the *middleware programming pattern* as known from Koa.js or Express.js. Complexity and extensibility can quite elegantly be managed this way.
 
 A middleware is written as easy such a simple function:
 
@@ -69,23 +83,10 @@ async (ctx, next) => {
 You can register the middleware like this:
 
 ```js
-site.use(tidy(options))
+site.use(myMiddlewareFunction)
 ```
 
-In this case `tidy` would be a middleware that pretty prints HTML content. It is called to pass options and will return a function as described before.
-
-For advanced use cases it is also possible to register an object, that explain more about itself for better integration like:
-
-```js
-site.use({
-  top: true,
-  middleware: tidy()
-})
-``` 
-
-This example will put the middleware on the very top of the execution line. In this case it makes sense, because then we can be sure that all the HTML document setup has already been performed.
-
-Middleware can of course be added per page, like this:
+It can also be added per page, like this:
 
 ```js
 site.html('/', template, async ctx => {
@@ -93,11 +94,60 @@ site.html('/', template, async ctx => {
 })
 ```
 
-Here are some example plugins that already come with Hostic:
+## Plugins
 
-### hyperlinks
+A special kind of Middleware is the Plugin. It is basically the same, but it can have some attributes to better define its place in the process chain. You add them like this: 
 
-Iterates through all hyperlinks and allows to apply specific changes to them.
+```js 
+import { plugin } from 'hostic'
+
+// ...
+
+app.use(plugin.tidy())
+```
+
+This is the most simple variant of a plugin:
+
+```js
+export function example(opt = {}) {
+  return {
+    name: 'example',
+    priority: 0.80,
+    middleware: async (ctx, next) => {
+      // ...
+      await next()
+      // ..
+    })
+  })
+```
+
+The `priority` tells when the plugin should be executed. The higher the value the earlier it executes. Imagine it like they are nested like this:
+
+```js
+jsx {
+  links {
+    html {
+   		// your middleware   
+    }
+  }
+}
+```
+
+These are the priorities of plugins bundled with Hostic. The ones with stars are activated by default.
+
+| Priority | Plugin                                 | Description                                                  |
+| -------- | -------------------------------------- | ------------------------------------------------------------ |
+| 0.99     | ***jsx**                               | Provides JSX Functionality                                   |
+| 0.98     | tidy                                   | Makes HTML pretty                                            |
+| 0.90     | ...                                    | User slot for top level plugins                              |
+| 0.80     | locale, ***links**                     | Apply translations and adjust links and media to be absolute |
+| 0.70     | ...                                    | User slot for plugins that require translations              |
+| 0.60     | disqus, matomo, cookieConsent, youtube | Services                                                     |
+| 0.55     | meta                                   | SEO funcitionality                                           |
+| 0.50     | ***html**                              | Makes sure `body` and `head` are correct, otherwise adds them |
+|          | ...                                    | User slot for templates etc. Default priority is `0`         |
+
+More details:
 
 ### matomo
 
@@ -107,15 +157,33 @@ Adds tracking code for Matomo to pages to allow better insights about your visit
 
 Use the original code from YouTube to embed a video and this plugin will replace it by a lazy loading alternative. This helps speeding up page load while at the same time improving privacy for the visitor.
 
-### localization
+### cookieConsent
 
-xxx
+Displays an information about the use of cookies, required by European law.
+
+### disqus
+
+Privacy conforming integration of Disqus service.
+
+### locale
+
+Translate:  
+
+- Text content that starts with underscore like `<div>_Translate this</div>`
+- Remove elements with not matching languages in `data-lang` attributes, like `<div data-lang="en">Translate this</div>`
+- Remove non matching elements like `<en>Translate this</en>`
+
+Translations can be provided as simple objects like:
+
+```json
+{
+  "Translate this": "Übersetze das"
+}
+```
 
 ## Virtual DOM
 
-This DOM abstraction for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`.
-
-xxx
+This DOM abstraction for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
 
 ## Page Structure
 
@@ -140,6 +208,15 @@ site.routes.values().forEach(page => {
 ```
 
 Another step is done for assets. If a HTML page has references to images, CSS, JS etc. it can add these references on the fly. That increases speed and offers more flexibility. The build process for the static pages is therefore run twice, because in the first step new references to assets might have been added. 
+
+## Apache
+
+By convention the `.html` suffix is dropped i.e. the url `/a/b.html` will become `/a/b`. To support this on Apache add a `.htaccess` file with the following lines:
+
+```apache
+RewriteEngine on
+RewriteRule ^([^.]+[^/])$ $1.html [PT]
+```
 
 ## Configuration {#env}
 
@@ -197,13 +274,4 @@ site.html('/', { title: 'Welcome' }, template, ctx => {
 
 ### Plugins
 
-0.99 jsx
-0.98 tidy
-0.90 ...
-0.80 locale, links (assets)
-0.70 ...
-0.60 disqus, matomo, cookieConsent 
-0.55 youtube
-0.50 html
 
-0.00 ... all others

@@ -7,6 +7,7 @@ const { buildOptions } = require('./build-options.js')
 const { duration } = require('./utils/perfutil.js')
 
 const log = require('debug')('hostic:main')
+
 const BUNDLE = resolve('.hostic/bundle.js')
 const sitePath = resolve('site')
 
@@ -16,7 +17,9 @@ let bundle
 async function performUserSetup() {
   try {
     global.basePath = sitePath
-    return bundle?.default(sitePath)
+    if (bundle) {
+      return bundle.default(sitePath)
+    }
   } catch (err) {
     console.error('Exception:', err)
   }
@@ -43,7 +46,7 @@ async function build() {
   delete require.cache[require.resolve(BUNDLE)]
   bundle = require(BUNDLE)
 
-  return performUserSetup() // bundle?.default(sitePath)
+  return performUserSetup()
 }
 
 async function main() {

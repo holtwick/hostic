@@ -18,9 +18,5 @@ module.exports.duration = function () {
       notation: 'compact',
       compactDisplay: 'long',
     })
-    // if (duration < 10) {
-    //   return `${duration.toFixed(4)}ms`
-    // }
-    // return `${duration.toFixed(0)}ms`
   }
 }

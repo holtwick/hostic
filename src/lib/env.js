@@ -42,7 +42,7 @@ function parse(src, options) {
       }
 
       obj[key] = val
-    } else if (line?.trim()?.length > 1) {
+    } else if (line && line.trim().length > 1) {
       log(`did not match key and value when parsing line ${idx + 1}: ${line}`)
     }
   })

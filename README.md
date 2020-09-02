@@ -268,7 +268,7 @@ Fast previews and build processes are a great thing to have if you are working w
 
 ## Why another web site builder?
 
-Read about it in [my blog](https://holtwick.de/blog/).
+Read about it in [my blog](https://holtwick.de/blog/birth-of-hostic?ref=github&kw=hostic).
 
 I don't know... there are plenty of good tools around. But I stumbled into creating this one and then got fascinated by [esbuild](https://github.com/evanw/esbuild), [vite](https://github.com/vitejs/vite), the own virtual DOM and other details that where interesting to implement. For non geeky people it might be easier to start with something from the shelf like [11ty](https://www.11ty.dev/).
 

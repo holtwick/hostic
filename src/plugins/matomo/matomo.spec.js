@@ -49,4 +49,18 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
 </script><noscript><img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt=""></noscript>`)
   })
 
+  it('should change url', () => {
+    const matomoCampaign = 'a'
+    const matomoKeyword = 'b'
+
+    const handleURL = (url) => {
+      url = new URL(url)
+      matomoCampaign && url.searchParams.append('pk_campaign', matomoCampaign)
+      matomoKeyword && url.searchParams.append('pk_kwd', matomoKeyword)
+      return url.toString()
+    }
+
+    expect(handleURL('https://holtwick.de/imprint')).toBe('https://holtwick.de/imprint?pk_campaign=a&pk_kwd=b')
+  })
+
 })

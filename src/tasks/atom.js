@@ -12,21 +12,34 @@ export function atom(
     posts,
     title,
     subtitle,
+    fallbackContent = '',
     path,
     authorName,
     authorEmail,
     authorURL,
     icon,
     handleBody,
+    matomoCampaign,
+    matomoKeyword,
   }) {
 
   site.xml(path, ctx => {
     let { url } = ctx
+
+    const handleURL = (url) => {
+      url = new URL(url)
+      if (matomoCampaign) {
+        url.searchParams.append('pk_campaign', matomoCampaign)
+        url.searchParams.append('pk_kwd', 'main')
+      }
+      return url.toString()
+    }
+
     ctx.body = <feed xmlns="http://www.w3.org/2005/Atom">
       <title type="text">{title}</title>
       {subtitle && <subtitle type="text">{subtitle}</subtitle>}
       <link href={url} rel="self" type="application/atom+xml"/>
-      <link href={site.baseURL} type="text/html"/>
+      <link href={handleURL(site.baseURL)} type="text/html"/>
       {
         icon && <fragment>
           <icon>{icon}</icon>
@@ -43,7 +56,8 @@ export function atom(
 
       {
         posts.map(post => {
-          let summary = 'The full article is available on holtwick.de'
+          let postURL = post.url
+          let content = fallbackContent
           if (post.markdown) {
             let { html, body } = markdown(post.markdown, {
               outline: false,
@@ -72,21 +86,37 @@ export function atom(
 
               tidyDOM(body)
 
+              body.handle(`a[href^="${site.baseURL}"]`, e => {
+                if (matomoCampaign) {
+                  let url = new URL(e.getAttribute('href'))
+                  url.searchParams.append('pk_campaign', matomoCampaign)
+                  url.searchParams.append('pk_kwd', post.path)
+                  e.setAttribute('href', url.toString())
+                }
+              })
               body.handle('iframe', e => e.remove())
+
+
 
               html = body.render()
             }
             if (html) {
-              summary = html
+              content = html
+            }
+            if (matomoCampaign) {
+              let url = new URL(postURL)
+              url.searchParams.append('pk_campaign', matomoCampaign)
+              url.searchParams.append('pk_kwd', post.path)
+              postURL = url.toString()
             }
           }
           return <entry>
             <id>{post.url}</id>
             <title type="text">{post.headline}</title>
-            <link rel="self" href={post.url}/>
+            <link rel="self" href={postURL}/>
             <updated>{post.date?.toISOString()}</updated>
             <content type="html">{
-              CDATA(summary)
+              CDATA(content)
             }</content>
           </entry>
         })

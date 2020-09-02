@@ -133,9 +133,9 @@ export class VNode {
     if (p) {
       let index = this._indexInParent()
       if (index >= 0) {
-        this._childNodes?.[index]?._parentNode = null
         nodes = nodes.map(n => typeof n === 'string' ? new VTextNode(n) : n.remove())
         p._childNodes.splice(index, 1, ...nodes)
+        this._parentNode = null
         p._fixChildNodesParent()
       }
     }

@@ -39,7 +39,7 @@
     "chokidar": "^3.4.2",
     "css-what": "^3.3.0",
     "debug": "^4.1.1",
-    "esbuild": "^0.6.28",
+    "esbuild": "^0.6.29",
     "express": "^4.17.1",
     "he": "^1.2.0",
     "highlight.js": "^10.1.2",

@@ -1,14 +1,14 @@
 // const log = require('debug')('hostic:deep')
-import { cloneDeep } from 'lodash'
+// import { cloneDeep } from 'lodash'
 
 let log = console.log
 
 const isObject = obj => obj && typeof obj === 'object'
 const isPrimitive = obj => Object(obj) !== obj
 
-export function deepClone(obj) {
-  return cloneDeep(obj)
-}
+// export function deepClone(obj) {
+//   return cloneDeep(obj)
+// }
 
 // // https://stackoverflow.com/a/40294058/140927
 // // Handles cyclic references

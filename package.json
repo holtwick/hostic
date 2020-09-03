@@ -45,7 +45,6 @@
     "highlight.js": "^10.1.2",
     "htmlparser2": "^4.1.0",
     "image-size": "^0.8.3",
-    "lodash": "^4.17.20",
     "marked": "^1.1.1",
     "mime-types": "^2.1.27",
     "minimatch": "^3.0.4",

@@ -33,6 +33,10 @@
   "bugs": {
     "url": "https://github.com/holtwick/hostic/issues"
   },
+  "funding": {
+    "type": "GitHub Sponsors ❤",
+    "url": "https://github.com/sponsors/holtwick"
+  },
   "homepage": "https://github.com/holtwick/hostic",
   "dependencies": {
     "chalk": "^4.1.0",

@@ -1,6 +1,6 @@
-import * as p from 'path'
+const { parse } = require('path')
 
-export function normalizePath(path) {
+module.exports.normalizePath = function normalizePath(path) {
   if (typeof path !== 'string') {
     console.warn('Invalid path', path)
   }
@@ -15,16 +15,16 @@ export function normalizePath(path) {
 //   base: 'file.txt',
 //   ext: '.txt',
 //   name: 'file' }
-export function parsePath(path) {
+module.exports.parsePath = function parsePath(path) {
   if (path.endsWith('/')) {
     return {
       dir: path,
     }
   }
-  return p.parse(path)
+  return parse(path)
 }
 
-export function getBasePath(path) {
+module.exports.getBasePath = function getBasePath(path) {
   let basePath = path
   if (!path.endsWith('/')) {
     basePath = path.replace(/[^/]*$/, '')

@@ -34,6 +34,13 @@ export class Site {
     log('Site', path, this.uid)
     this.data = {}
 
+    this.config = {
+      forceSSL: true,
+      noWWW: true,
+      redirectLang: true,
+      errorPage: '404',
+    }
+
     if (baseURL == null) {
       baseURL = process.env.BASE_URL
     }

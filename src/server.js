@@ -1,3 +1,5 @@
+const { normalizePath } = require('./utils/pathutil.js')
+
 const chokidar = require('chokidar')
 const mime = require('mime-types')
 const express = require('express')
@@ -125,7 +127,7 @@ module.exports.startServer = function (
   }
 
   app.use('/', (req, res) => {
-    const path = decodeURIComponent(req.path)
+    let path = decodeURIComponent(req.path)
     // console.info(`${new Date().toISOString()} - ${req.method} ${req.path}`)
 
     print(`${req.method} `)
@@ -136,6 +138,19 @@ module.exports.startServer = function (
     if (!site) {
       log('Site not available')
       return
+    }
+
+    let routeExists = site.routes.has(normalizePath(path))
+    if (!routeExists) {
+      if (site.config.redirectLang) {
+        if (!(path.startsWith('/en/') || path.startsWith('/de/'))) {
+          res.redirect('/en' + path)
+          return
+        }
+      }
+      if (site.config.errorPage) {
+        path = site.config.errorPage
+      }
     }
 
     site.routes.render(path, { site }).then(content => {

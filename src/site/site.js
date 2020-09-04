@@ -96,7 +96,7 @@ export class Site {
     return this.folderManager.stat(path)
   }
 
-  readMarkdown(file, { path }) {
+  readMarkdown(file, { path } = {}) {
     log('readMarkdown', file)
     let data, sourceFolder
     if (typeof file === 'string') {

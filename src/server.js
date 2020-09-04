@@ -140,16 +140,20 @@ module.exports.startServer = function (
       return
     }
 
+    // Mimic .htaccess
     let routeExists = site.routes.has(normalizePath(path))
     if (!routeExists) {
       if (site.config.redirectLang) {
         if (!(path.startsWith('/en/') || path.startsWith('/de/'))) {
-          res.redirect('/en' + path)
+          let newPath = '/en' + path
+          print(magenta(`\nRedirect ${path} to ${newPath}\n`))
+          res.redirect(newPath)
           return
         }
       }
       if (site.config.errorPage) {
         path = site.config.errorPage
+        print(magenta(`\nShow error page at ${path}\n`))
       }
     }
 

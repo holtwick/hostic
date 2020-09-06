@@ -1,8 +1,7 @@
 import { markdown } from '../utils/markdown.js'
-import { CDATA } from '../html/html.js'
+import { CDATA, tidyDOM } from 'hostic-dom'
 import { absolute } from '../site/links/absolute.js'
 import { assets } from '../site/links/assets.js'
-import { tidyDOM } from '../html/tidy.js'
 
 // https://validator.w3.org/feed/check.cgi?url=https%3A%2F%2Fholtwick.de%2Fatom.xml
 

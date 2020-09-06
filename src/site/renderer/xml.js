@@ -1,4 +1,4 @@
-import { xml } from '../../html/xml.js'
+import { xml } from 'hostic-dom'
 
 const log = require('debug')('hostic:render:html')
 

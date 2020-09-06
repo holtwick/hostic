@@ -1,7 +1,5 @@
-import { vdom } from '../html/vdomparser.js'
-import { createHTMLDocument } from '../html/vdom.js'
+import { vdom, createHTMLDocument } from 'hostic-dom'
 import { TYPE_HTML } from '../site/types.js'
-import { assets } from '../site/links/assets.js'
 
 const log = require('debug')('hostic:mw:html')
 

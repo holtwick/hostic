@@ -18,10 +18,13 @@ import { html } from '../plugins/html.js'
 import { jsx } from '../plugins/jsx.js'
 import { links } from '../plugins/links.js'
 import { getContent } from './files.js'
+import { files } from './files.js'
 import { assets } from './links/assets.js'
 import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
+
+const { resolve } = require('path')
 
 const inspect = Symbol.for('nodejs.util.inspect.custom')
 
@@ -33,6 +36,13 @@ export class Site {
     this.uid = UUID()
     log('Site', path, this.uid)
     this.data = {}
+
+    this.config = {
+      forceSSL: true,
+      noWWW: true,
+      redirectLang: true,
+      errorPage: '404',
+    }
 
     if (baseURL == null) {
       baseURL = process.env.BASE_URL
@@ -89,7 +99,7 @@ export class Site {
     return this.folderManager.stat(path)
   }
 
-  readMarkdown(file, { path }) {
+  readMarkdown(file, { path } = {}) {
     log('readMarkdown', file)
     let data, sourceFolder
     if (typeof file === 'string') {
@@ -134,14 +144,29 @@ export class Site {
 
   static(path, source = null) {
     if (!source) source = path
-    let next = compose([
-      context({ path }),
-      file(source),
-    ])
-    this.routes.set(path, {
-      path,
-      next,
-    })
+
+    let ff
+    if (this.stat(source)?.isDirectory()) {
+      ff = files({
+        path,
+      })
+    } else {
+      let fullPath = resolve(global.basePath || process.cwd(), '.', source)
+      ff = [{
+        path,
+        fullPath,
+      }]
+    }
+    for (let { path, fullPath } of ff) {
+      let next = compose([
+        context({ path }),
+        file(fullPath),
+      ])
+      this.routes.set(path, {
+        path,
+        next,
+      })
+    }
   }
 
   registeredMiddlewares = {

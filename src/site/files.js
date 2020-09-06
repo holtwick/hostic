@@ -31,6 +31,7 @@ export function files({
                         basePath,
                         pattern,
                         filter,
+                        path,
                         dotfiles = 'ignore',
                         // extensions = []
                       } = {}) {
@@ -45,6 +46,16 @@ export function files({
       path.startsWith('.') || path.includes('/.')
     )
   ))
+
+  if (path) {
+    if (path.startsWith('/')) {
+      path = path.substr(1)
+    }
+    if (!path.endsWith('/')) {
+      path += '/'
+    }
+    paths = paths.filter(p => p.startsWith(path))
+  }
 
   if (pattern) {
     if (typeof pattern === 'string') {

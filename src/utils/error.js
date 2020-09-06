@@ -12,13 +12,23 @@ module.exports.getErrorStats = function getErrorStats() {
 }
 
 module.exports.error = function error(...args) {
-  console.error(red('Error: ' + (args.map(a => a.toString()).join(' '))))
+  console.error(red('\nError: ' + (args.map(a => a.toString()).join(' '))))
   ++global.errorStats.errors
+  let err = args.find(a => a instanceof Error)
+  if (err) {
+    console.error(err)
+  } else {
+    console.trace()
+  }
 }
 
 module.exports.warn = function warn(...args) {
-  console.error(yellow('Warning: ' + (args.map(a => a.toString()).join(' '))))
+  console.error(yellow('\nWarning: ' + (args.map(a => a.toString()).join(' '))))
   ++global.errorStats.warnings
+  let err = args.find(a => a instanceof Error)
+  if (err) {
+    console.warn(err)
+  }
 }
 
 module.exports.clearErrorStats()

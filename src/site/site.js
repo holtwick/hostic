@@ -14,6 +14,7 @@ import { STATUS_PAGE_PATH } from '../config.js'
 import { compose } from './compose.js'
 import { context } from '../plugins/context.js'
 import { file } from '../plugins/file.js'
+import { css } from '../plugins/postcss.js'
 import { html } from '../plugins/html.js'
 import { jsx } from '../plugins/jsx.js'
 import { links } from '../plugins/links.js'
@@ -161,6 +162,33 @@ export class Site {
       let next = compose([
         context({ path }),
         file(fullPath),
+      ])
+      this.routes.set(path, {
+        path,
+        next,
+      })
+    }
+  }
+
+  css(path, source = null) {
+    if (!source) source = path
+
+    // let ff
+    // if (this.stat(source)?.isDirectory()) {
+    //   ff = files({
+    //     path,
+    //   })
+    // } else {
+    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
+    let ff = [{
+      path,
+      fullPath,
+    }]
+    // }
+    for (let { path, fullPath } of ff) {
+      let next = compose([
+        context({ path }),
+        css(fullPath),
       ])
       this.routes.set(path, {
         path,

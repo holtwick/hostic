@@ -3,7 +3,8 @@ export * from './site/types.js'
 export * from './site/files.js'
 
 export * from './plugins/index.js'
-export * from './html/index.js'
+
+export * from 'hostic-dom'
 
 export * from './utils/markdown.js'
 export * from './utils/dateutils.js'

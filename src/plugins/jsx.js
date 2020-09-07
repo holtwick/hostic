@@ -1,6 +1,4 @@
-import { vdom } from '../html/vdomparser.js'
-import { hFactory } from '../html/h.js'
-import { document } from '../html/vdom.js'
+import { vdom, document, hFactory } from 'hostic-dom'
 import { TYPE_HTML } from '../site/types.js'
 import { TYPE_XML } from '../site/types.js'
 import { assert } from '../utils/assert.js'

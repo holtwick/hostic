@@ -1,7 +1,5 @@
-import { vdom } from '../html/vdomparser.js'
-import { createHTMLDocument } from '../html/vdom.js'
+import { vdom, createHTMLDocument } from 'hostic-dom'
 import { TYPE_HTML } from '../site/types.js'
-import { assets } from '../site/links/assets.js'
 
 const log = require('debug')('hostic:mw:html')
 
@@ -41,7 +39,7 @@ export function html(opt = {}) {
 
       // Move head stuff to right location
       ctx.body.querySelectorAll('meta, link, style, title').forEach(e => {
-        if (e?.parentNode?.tagName !== 'HEAD') {
+        if (!['HEAD', 'SVG'].includes(e?.parentNode?.tagName)) {
           ctx.body.head.appendChild(e)
         }
       })

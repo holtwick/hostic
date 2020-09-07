@@ -39,7 +39,7 @@ export function html(opt = {}) {
 
       // Move head stuff to right location
       ctx.body.querySelectorAll('meta, link, style, title').forEach(e => {
-        if (e?.parentNode?.tagName !== 'HEAD') {
+        if (!['HEAD', 'SVG'].includes(e?.parentNode?.tagName)) {
           ctx.body.head.appendChild(e)
         }
       })

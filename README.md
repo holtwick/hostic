@@ -9,7 +9,7 @@ There are plenty static web site generators around, but many of them *think for 
 Some features:
 
 - **Supports JSX** but is not related to any framework like React, Vue or Svelte
-- Implements a light way DOM abstraction (VDOM) to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
+- Implements a light way DOM abstraction ([hostic-dom](https://github.com/holtwick/hostic-dom)) to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
 - **Real time preview** with self reloading pages. Experiment with different designs or contents.
 - **Any file type** can be created like XML sitemaps of RSS feeds, robots.txt or whatever you need
 - Great **Markdown support**: Write your articles using Markdown and refer to assets used in it. Hostic puts it all together. Works great with [OnePile.app](https://onepile.app?ref=hostic&kw=github).
@@ -96,7 +96,7 @@ site.html('/', template, async ctx => {
 
 ## Context
 
-The context that is passed to Middleware is important. The most important property of it is `body`. It holds the content of the page. For HTML and XML usually in form of a VDOM. But it can also be used to pass properties to other Middlewares, like `lang` for language or `title` for the page title.
+The context that is passed to Middleware is important. The most important property of it is `body`. It holds the content of the page. For HTML and XML usually in form of a [virtual DOM](https://github.com/holtwick/hostic-dom). But it can also be used to pass properties to other Middlewares, like `lang` for language or `title` for the page title.
 
 ## Plugins
 
@@ -185,9 +185,11 @@ Translations can be provided as simple objects like:
 }
 ```
 
-## Virtual DOM (VDOM)
+## Virtual DOM ([hostic-dom](https://github.com/holtwick/hostic-dom))
 
-This DOM abstraction for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
+This [DOM abstraction](https://github.com/holtwick/hostic-dom) for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
+
+Learn more at [github.com/holtwick/hostic-dom](https://github.com/holtwick/hostic-dom).
 
 ## Static Files
 
@@ -242,7 +244,7 @@ RewriteEngine on
 RewriteRule ^([^.]+[^/])$ $1.html [PT]
 ```
 
-## Configuration {#env}
+## Configuration
 
 The top level of configuration are environment variables. You can set them in your build environment or note them down into `.env` or `.env.local` files. The later one is intended to be excluded from Git repositories in case you need to set sensitive information.
 
@@ -251,7 +253,7 @@ Available settings are:
 - `BASE_URL=https://holtwick.de` - The base URL that is required to calculate absolute URLs e.g. for canonical URL or alternative languages meta data, but also for sitemaps and the like. For the preview server this will be automatically set to the appropriate `localhost` address. This is especially useful if you are building for different targets like `stage` and `production`. 
 - `PORT=8080` - The preview servers port number 
 
-## Performance {#performance}
+## Performance
 
 Fast previews and build processes are a great thing to have if you are working with a tool like this. Hostic tries to achieve this by doing the following:
 
@@ -271,5 +273,4 @@ Fast previews and build processes are a great thing to have if you are working w
 Read about it in [my blog](https://holtwick.de/blog/birth-of-hostic?ref=github&kw=hostic).
 
 I don't know... there are plenty of good tools around. But I stumbled into creating this one and then got fascinated by [esbuild](https://github.com/evanw/esbuild), [vite](https://github.com/vitejs/vite), the own virtual DOM and other details that where interesting to implement. For non geeky people it might be easier to start with something from the shelf like [11ty](https://www.11ty.dev/).
-
 

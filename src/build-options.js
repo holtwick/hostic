@@ -1,3 +1,5 @@
+const pkg = require('../package.json')
+
 module.exports.buildOptions = {
   sourcemap: 'inline',
   target: 'node12',
@@ -11,4 +13,10 @@ module.exports.buildOptions = {
     '.txt': 'text',
     '.md': 'text',
   },
+  external: [
+    // ...Object.keys(pkg.dependencies ?? {}),
+    // ...Object.keys(pkg.devDependencies ?? {}),
+    // ...Object.keys(pkg.peerDependencies ?? {}),
+    'esbuild',
+  ]
 }

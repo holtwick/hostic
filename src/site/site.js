@@ -24,6 +24,7 @@ import { assets } from './links/assets.js'
 import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
+import { js } from '../plugins/ecmascript.js'
 
 const { resolve } = require('path')
 
@@ -172,7 +173,6 @@ export class Site {
 
   css(path, source = null) {
     if (!source) source = path
-
     // let ff
     // if (this.stat(source)?.isDirectory()) {
     //   ff = files({
@@ -189,6 +189,32 @@ export class Site {
       let next = compose([
         context({ path }),
         css(fullPath),
+      ])
+      this.routes.set(path, {
+        path,
+        next,
+      })
+    }
+  }
+
+  js(path, source = null) {
+    if (!source) source = path
+    // let ff
+    // if (this.stat(source)?.isDirectory()) {
+    //   ff = files({
+    //     path,
+    //   })
+    // } else {
+    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
+    let ff = [{
+      path,
+      fullPath,
+    }]
+    // }
+    for (let { path, fullPath } of ff) {
+      let next = compose([
+        context({ path }),
+        js(fullPath),
       ])
       this.routes.set(path, {
         path,

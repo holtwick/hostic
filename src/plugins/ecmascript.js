@@ -1,13 +1,15 @@
 const log = require('debug')('hostic:mw:postcss')
 
 const esbuild = require('esbuild')
+import { dirname } from 'path'
+import { readFileSync } from 'fs'
 
 export function js(source) {
 
   return async (ctx, next) => {
     log('start') //, source, ctx, next)
 
-    // const css = readFileSync(source, 'utf8')
+    const contents = readFileSync(source, 'utf8')
     // const cssctx = { parser: true, map: 'inline' }
     // const { plugins, options } = postcssrc.sync(cssctx)
     // let result = await postcss(plugins).process(css, { from: source, to: source })
@@ -30,7 +32,12 @@ export function js(source) {
       //   ...Object.keys(pkg.peerDependencies ?? {}),
       // ],
       write: false,
-      entryPoints: [source],
+      // entryPoints: [source],
+      stdin: {
+        resolveDir: dirname(source),
+        // sourcefile: source,
+        contents,
+      },
     })
 
     ctx.body = new TextDecoder('utf-8').decode(result.outputFiles[0].contents)

@@ -25,7 +25,8 @@ import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
 import { js } from '../plugins/ecmascript.js'
-import { vdom } from 'hostic-dom'
+import { vdom, VDocumentFragment } from 'hostic-dom'
+import { removeBodyContainer } from 'hostic-dom'
 
 const { resolve } = require('path')
 
@@ -132,7 +133,7 @@ export class Site {
 
   readHTML(file, { path } = {}) {
     let { content, sourceFolder } = this.readFile(file)
-    let body = vdom(content)
+    let body = removeBodyContainer(vdom(content))
     assets({
       body,
       site: this,

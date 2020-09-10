@@ -7,7 +7,15 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
   routePath = routePath.endsWith('/') ? routePath.slice(0, -1) : routePath
 
   files.forEach(file => {
-    let props = site.readMarkdownProperties(file) || {}
+
+    let props = {
+      type: 'html',
+    }
+
+    if (['.md', '.mdown', '.markdown'].includes(file.ext)) {
+      props = site.readMarkdownProperties(file) || {}
+      props.type = 'markdown'
+    }
 
     let slug = props.slug || file.name
     slug = slug === 'index' ? '' : slug
@@ -39,7 +47,13 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
       path,
       props,
       ctx => {
-        ctx.markdown = site.readMarkdown(file, {path: ctx.path})
+        if (props.type === 'markdown') {
+          ctx.markdown = site.readMarkdown(file, { path: ctx.path })
+          ctx.body = ctx.markdown.body
+        } else {
+          ctx.html = site.readHTML(file, { path: ctx.path })
+          ctx.body = ctx.html.body
+        }
         ctx.body = bodyFn(ctx) || ctx.body
       })
   })

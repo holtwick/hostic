@@ -25,6 +25,7 @@ import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
 import { js } from '../plugins/ecmascript.js'
+import { vdom } from 'hostic-dom'
 
 const { resolve } = require('path')
 
@@ -101,18 +102,25 @@ export class Site {
     return this.folderManager.stat(path)
   }
 
-  readMarkdown(file, { path } = {}) {
-    log('readMarkdown', file)
-    let data, sourceFolder
+  readFile(file) {
+    let content, sourceFolder
     if (typeof file === 'string') {
-      data = this.read(file)
+      content = this.read(file)
       sourceFolder = getBasePath(file)
     } else {
-      data = getContent(file.fullPath)
+      content = getContent(file.fullPath)
       sourceFolder = getBasePath(file.fullPath)
     }
-    let { body, ...info } = markdown(data)
-    // console.log('readMarkdown', file)
+    return {
+      content,
+      sourceFolder,
+    }
+  }
+
+  readMarkdown(file, { path } = {}) {
+    log('readMarkdown', file)
+    let { content, sourceFolder } = this.readFile(file)
+    let { body, ...info } = markdown(content)
     assets({
       body,
       site: this,
@@ -120,6 +128,18 @@ export class Site {
       path,
     })
     return { body, ...info }
+  }
+
+  readHTML(file, { path } = {}) {
+    let { content, sourceFolder } = this.readFile(file)
+    let body = vdom(content)
+    assets({
+      body,
+      site: this,
+      sourceFolder,
+      path,
+    })
+    return { body }
   }
 
   // _markdownCache = {}

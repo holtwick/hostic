@@ -46,7 +46,7 @@
     "esbuild": "^0.6.33",
     "express": "^4.17.1",
     "highlight.js": "^10.2.0",
-    "hostic-dom": "^0.6.0",
+    "hostic-dom": "^0.7.0",
     "image-size": "^0.9.1",
     "marked": "^1.1.1",
     "mime-types": "^2.1.27",

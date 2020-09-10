@@ -9,12 +9,12 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
   files.forEach(file => {
 
     let props = {
-      type: 'html',
+      sourceType: 'html',
     }
 
     if (['.md', '.mdown', '.markdown'].includes(file.ext)) {
       props = site.readMarkdownProperties(file) || {}
-      props.type = 'markdown'
+      props.sourceType = 'markdown'
     }
 
     let slug = props.slug || file.name
@@ -47,7 +47,7 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
       path,
       props,
       ctx => {
-        if (props.type === 'markdown') {
+        if (props.sourceType === 'markdown') {
           ctx.markdown = site.readMarkdown(file, { path: ctx.path })
           ctx.body = ctx.markdown.body
         } else {

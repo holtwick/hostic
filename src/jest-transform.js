@@ -1,6 +1,5 @@
 // Inspired by https://github.com/aelbore/esbuild-jest#readme
 
-const fs = require('fs')
 const pkg = require('../package.json')
 const esbuild = require('esbuild')
 const { buildOptions } = require('./build-options.js')
@@ -9,8 +8,8 @@ const external = [
   ...Object.keys(pkg.dependencies ?? {}),
   ...Object.keys(pkg.devDependencies ?? {}),
   ...Object.keys(pkg.peerDependencies ?? {}),
+  ...buildOptions.external,
 ]
-
 module.exports = {
 
   // https://jestjs.io/docs/en/troubleshooting#caching-issues
@@ -19,18 +18,13 @@ module.exports = {
   },
 
   process(content, filename) {
-    let file = `.hostic/${Math.random()}.js`
-
-    esbuild.buildSync({
+    let result = esbuild.buildSync({
       ...buildOptions,
-      outfile: file,
-      entryPoints: [filename],
       external,
+      write: false,
+      entryPoints: [filename],
     })
 
-    let js = fs.readFileSync(file, 'utf-8')
-    fs.unlinkSync(file)
-
-    return js
+    return new TextDecoder('utf-8').decode(result.outputFiles[0].contents)
   },
 }

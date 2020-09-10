@@ -14,6 +14,7 @@ import { STATUS_PAGE_PATH } from '../config.js'
 import { compose } from './compose.js'
 import { context } from '../plugins/context.js'
 import { file } from '../plugins/file.js'
+import { css } from '../plugins/postcss.js'
 import { html } from '../plugins/html.js'
 import { jsx } from '../plugins/jsx.js'
 import { links } from '../plugins/links.js'
@@ -23,6 +24,9 @@ import { assets } from './links/assets.js'
 import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
+import { js } from '../plugins/ecmascript.js'
+import { vdom, VDocumentFragment } from 'hostic-dom'
+import { removeBodyContainer } from 'hostic-dom'
 
 const { resolve } = require('path')
 
@@ -99,18 +103,25 @@ export class Site {
     return this.folderManager.stat(path)
   }
 
-  readMarkdown(file, { path } = {}) {
-    log('readMarkdown', file)
-    let data, sourceFolder
+  readFile(file) {
+    let content, sourceFolder
     if (typeof file === 'string') {
-      data = this.read(file)
+      content = this.read(file)
       sourceFolder = getBasePath(file)
     } else {
-      data = getContent(file.fullPath)
+      content = getContent(file.fullPath)
       sourceFolder = getBasePath(file.fullPath)
     }
-    let { body, ...info } = markdown(data)
-    // console.log('readMarkdown', file)
+    return {
+      content,
+      sourceFolder,
+    }
+  }
+
+  readMarkdown(file, { path } = {}) {
+    log('readMarkdown', file)
+    let { content, sourceFolder } = this.readFile(file)
+    let { body, ...info } = markdown(content)
     assets({
       body,
       site: this,
@@ -118,6 +129,18 @@ export class Site {
       path,
     })
     return { body, ...info }
+  }
+
+  readHTML(file, { path } = {}) {
+    let { content, sourceFolder } = this.readFile(file)
+    let body = removeBodyContainer(vdom(content))
+    assets({
+      body,
+      site: this,
+      sourceFolder,
+      path,
+    })
+    return { body }
   }
 
   // _markdownCache = {}
@@ -161,6 +184,58 @@ export class Site {
       let next = compose([
         context({ path }),
         file(fullPath),
+      ])
+      this.routes.set(path, {
+        path,
+        next,
+      })
+    }
+  }
+
+  css(path, source = null) {
+    if (!source) source = path
+    // let ff
+    // if (this.stat(source)?.isDirectory()) {
+    //   ff = files({
+    //     path,
+    //   })
+    // } else {
+    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
+    let ff = [{
+      path,
+      fullPath,
+    }]
+    // }
+    for (let { path, fullPath } of ff) {
+      let next = compose([
+        context({ path }),
+        css(fullPath),
+      ])
+      this.routes.set(path, {
+        path,
+        next,
+      })
+    }
+  }
+
+  js(path, source = null) {
+    if (!source) source = path
+    // let ff
+    // if (this.stat(source)?.isDirectory()) {
+    //   ff = files({
+    //     path,
+    //   })
+    // } else {
+    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
+    let ff = [{
+      path,
+      fullPath,
+    }]
+    // }
+    for (let { path, fullPath } of ff) {
+      let next = compose([
+        context({ path }),
+        js(fullPath),
       ])
       this.routes.set(path, {
         path,

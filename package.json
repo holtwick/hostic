@@ -1,11 +1,12 @@
 {
   "name": "hostic",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Yet another static web site generator",
   "main": "src/index.js",
   "scripts": {
     "build:cli": "node src/cli-builder.js",
-    "test": "jest --no-cache"
+    "test": "jest --no-cache",
+    "prepublish": "npm test"
   },
   "author": {
     "name": "Dirk Holtwick",
@@ -42,14 +43,16 @@
     "chalk": "^4.1.0",
     "chokidar": "^3.4.2",
     "debug": "^4.1.1",
-    "esbuild": "^0.6.31",
+    "esbuild": "^0.6.33",
     "express": "^4.17.1",
-    "highlight.js": "^10.1.2",
-    "hostic-dom": "^0.3.2",
+    "highlight.js": "^10.2.0",
+    "hostic-dom": "^0.6.0",
     "image-size": "^0.9.1",
     "marked": "^1.1.1",
     "mime-types": "^2.1.27",
     "minimatch": "^3.0.4",
+    "postcss": "^7.0.32",
+    "postcss-load-config": "^2.1.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "source-map-support": "^0.5.19",

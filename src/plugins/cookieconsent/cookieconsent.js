@@ -14,6 +14,8 @@ export function cookieConsent(pluginOpt = {}) {
 
       await next()
 
+      const { lang } = ctx
+
       let body = ctx.body.ownerDocument.body
       body.appendChild(
         <fragment>
@@ -22,7 +24,7 @@ export function cookieConsent(pluginOpt = {}) {
               <en>This website uses cookies to ensure you get the best experience on our website.</en>
               <de>Diese Website nutzt Cookies, um bestmögliche Funktionalität bieten zu können.</de>
               {' '}
-              <a href="/privacy">
+              <a href={`/${lang}/privacy`}>
                 <en>Learn&nbsp;more</en>
                 <de>Mehr&nbsp;Informationen</de>
               </a>

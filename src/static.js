@@ -28,7 +28,7 @@ function print(...parts) {
   process.stdout.write(parts.join(''))
 }
 
-module.exports.writeStatic = async function ({ site, time } = {}) {
+async function writeStatic({ site, time } = {}) {
   let { routes } = site
 
   print(magenta(`\nBase URL: `))
@@ -74,6 +74,11 @@ module.exports.writeStatic = async function ({ site, time } = {}) {
   print(blue.bold('\nPASS 2 - Assets\n'))
   await writeRoutes(excludes)
 
+  // Pass 2: Checks
+  print(blue.bold('\nPASS 3 - Checks\n'))
+  await Promise.all(site.checks.map(check => check(site)))
+  // await site.checks[0](site)
+
   let status = getErrorStats()
   if (status.errors > 0) {
     console.info(red(`\n${status.errors} errors occurred!`))
@@ -82,3 +87,5 @@ module.exports.writeStatic = async function ({ site, time } = {}) {
 
   console.info(green(`\nDone in ${time()}`))
 }
+
+module.exports.writeStatic = writeStatic

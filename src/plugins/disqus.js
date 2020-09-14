@@ -3,11 +3,9 @@ import { TYPE_HTML } from '../site/types.js'
 const defaultOpt = {
   selector: '.disqus',
   disqusURL: null, // 'https://xxx.disqus.com/embed.js',
-  privacyURL: 'privacy#comment',
 }
 
 export function disqus(pluginOpt) {
-
 
   return {
     name: 'disqus',
@@ -17,6 +15,9 @@ export function disqus(pluginOpt) {
       await next()
 
       let opt = Object.assign({}, defaultOpt, pluginOpt, ctx.disqus || {})
+
+      const { lang } = ctx
+      const privacyURL = ctx?.privacyURL ?? opt?.privacyURL ?? (lang ? `/${lang}/privacy` : '/privacy')
 
       const document = ctx.body.ownerDocument
       document.querySelectorAll(opt.selector).forEach(containerElement => {
@@ -29,8 +30,8 @@ export function disqus(pluginOpt) {
                 <en>The comment functionality is provided by <a href="https://disqus.com">Disqus</a>.</en>
                 <de>Die Kommentarfunktionalität wird von <a href="https://disqus.com">Disqus</a> zur Verfügung gestellt.</de>
                 <br/>
-                <en>Learn more about it in our <a href={opt.privacyURL}>Privacy Policy</a>.</en>
-                <de>Erfahre mehr darüber in unserer <a href={opt.privacyURL}>Datenschutzerklärung</a>.</de>
+                <en>Learn more about it in our <a href={privacyURL}>Privacy Policy</a>.</en>
+                <de>Erfahre mehr darüber in unserer <a href={privacyURL}>Datenschutzerklärung</a>.</de>
               </p>
               <p>
                 <br/>
@@ -62,6 +63,6 @@ export function disqus(pluginOpt) {
 
         containerElement.replaceWith(html)
       })
-    }
+    },
   }
 }

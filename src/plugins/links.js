@@ -16,7 +16,7 @@ export function links(opt = {}) {
         body: ctx.body,
         site: ctx.site,
         path: ctx.path,
-        sourceFolder: ctx.site.sourcePath
+        sourceFolder: ctx.site.sourcePath,
       })
 
       absolute({
@@ -24,6 +24,7 @@ export function links(opt = {}) {
         site: ctx.site,
         path: ctx.path,
       })
+
     },
   }
 

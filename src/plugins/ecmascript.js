@@ -18,26 +18,29 @@ export function js(source) {
     global.__dirname = '/Users/dirk/work/hostic/node_modules/esbuild'
     let result = esbuild.buildSync({
       bundle: true,
-      sitemap: true,
-      // minify: true,
-      // target: 'es2017',
+      sitemap: 'inline',
+      target: 'es2015',
       platform: 'browser',
       loader: {
         '.js': 'jsx',
+        '.css': 'text',
+        '.txt': 'text',
+        '.md': 'text',
       },
       jsxFactory: 'h',
+      // minify: true,
       // external: [
       //   ...Object.keys(pkg.dependencies ?? {}),
       //   ...Object.keys(pkg.devDependencies ?? {}),
       //   ...Object.keys(pkg.peerDependencies ?? {}),
       // ],
       write: false,
-      // entryPoints: [source],
-      stdin: {
-        resolveDir: dirname(source),
-        // sourcefile: source,
-        contents,
-      },
+      entryPoints: [source],
+      // stdin: {
+      //   resolveDir: dirname(source),
+      //   // sourcefile: source,
+      //   contents,
+      // },
     })
 
     ctx.body = new TextDecoder('utf-8').decode(result.outputFiles[0].contents)

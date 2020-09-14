@@ -25,8 +25,9 @@ import { status } from './status.js'
 import { error } from '../utils/error.js'
 import { warn } from '../utils/error.js'
 import { js } from '../plugins/ecmascript.js'
-import { vdom, VDocumentFragment } from 'hostic-dom'
+import { vdom } from 'hostic-dom'
 import { removeBodyContainer } from 'hostic-dom'
+import { checkLinks } from '../checks/links.js'
 
 const { resolve } = require('path')
 
@@ -46,7 +47,12 @@ export class Site {
       noWWW: true,
       redirectLang: true,
       errorPage: '404',
+      checkInternalLinks: true,
     }
+
+    this.checks = [
+      checkLinks
+    ]
 
     if (baseURL == null) {
       baseURL = process.env.BASE_URL

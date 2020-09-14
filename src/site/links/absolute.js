@@ -1,6 +1,17 @@
 import { resolve } from 'url'
 
-export function absolute({ body, path, site, targetBlank = true, allAbsolute = false }) {
+/*
+
+  Identifies local links:
+  - Remove baseURL if found
+
+ */
+
+export function absolute({
+                           body, path, site,
+                           targetBlank = true,   // Add target=_blank for external links
+                           allAbsolute = false,  // Add baseURL to all local links
+                         }) {
   body.handle('a[href]', e => {
     let href = e.getAttribute('href')
     if (/^(mailto:|data:|https?:)/.test(href)) {

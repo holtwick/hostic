@@ -11,9 +11,13 @@ module.exports.getErrorStats = function getErrorStats() {
   return { ...global.errorStats }
 }
 
+module.exports.incrementErrorCount = function incrementErrorCount() {
+  ++global.errorStats.errors
+}
+
 module.exports.error = function error(...args) {
   console.error(red('\nError: ' + (args.map(a => a.toString()).join(' '))))
-  ++global.errorStats.errors
+  incrementErrorCount()
   let err = args.find(a => a instanceof Error)
   if (err) {
     console.error(err)

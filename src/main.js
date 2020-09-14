@@ -8,30 +8,22 @@ const { duration } = require('./utils/perfutil.js')
 
 const log = require('debug')('hostic:main')
 
-// const BUNDLE = resolve('.hostic/bundle.js')
 const sitePath = resolve('site')
 
 let service
-// let bundle
 let code
 
 async function performUserSetup() {
   try {
     global.basePath = sitePath
-
     if (code) {
       code = `(function(exports) {
         ${code}
         return exports;
       })({})`
       let result = eval(code)
-      // console.log('code =', code)
-      console.log('result =', result)
       return result.default(sitePath)
     }
-    // if (bundle) {
-    //   return bundle.default(sitePath)
-    // }
   } catch (err) {
     console.error('Exception:', err)
   }
@@ -48,19 +40,13 @@ async function build() {
   // https://github.com/evanw/esbuild#command-line-usage
   const options = {
     ...buildOptions,
-    // outfile: BUNDLE,
     entryPoints: [sitePath + '/index.js'],
     write: false,
   }
   log('Build options', options)
 
   let result = await service.build(options)
-
   code = new TextDecoder('utf-8').decode(result.outputFiles[0].contents)
-
-  // delete require.cache[require.resolve(BUNDLE)]
-  // bundle = require(BUNDLE)
-
   return performUserSetup()
 }
 

@@ -76,16 +76,22 @@ async function writeStatic({ site, time } = {}) {
 
   // Pass 2: Checks
   print(blue.bold('\nPASS 3 - Checks\n'))
-  await Promise.all(site.checks.map(check => check(site)))
-  // await site.checks[0](site)
+  for (let check of site.checks) {
+    let result = await check(site)
+    if (result?.success) {
+      print(`✅ ${result.name}`)
+    } else {
+      print(red(`${result.name} ... failed with ${result.issues} issues\n`))
+    }
+  }
 
   let status = getErrorStats()
   if (status.errors > 0) {
-    console.info(red(`\n${status.errors} errors occurred!`))
+    console.info(red(`\n\n${status.errors} errors occurred!`))
     process.exit(1)
   }
 
-  console.info(green(`\nDone in ${time()}`))
+  console.info(green(`\n\nDone in ${time()}`))
 }
 
 module.exports.writeStatic = writeStatic

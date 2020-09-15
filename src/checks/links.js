@@ -17,7 +17,7 @@ export async function checkLinks(site) {
         body.querySelectorAll('a[href]').forEach(el => {
           let href = el.getAttribute('href')
           if (href.startsWith('/')) {
-            href = href.replace(/#.?$/, '')
+            href = href.replace(/[#?].*$/, '')
             if (!site.routes.has(href)) {
               warn(`Invalid link to ${href} "${el.textContent}" (found in ${path})`)
               issues += 1

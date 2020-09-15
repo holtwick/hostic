@@ -154,7 +154,9 @@ module.exports.startServer = function (
           }
         }
       }
-      if (site.config.errorPage) {
+      if (path === '/service-worker.js') {
+        print(magenta(` (ignored)`))
+      } else if (site.config.errorPage) {
         path = site.config.errorPage
         print(magenta(`\nShow error page at ${path}\n`))
       }

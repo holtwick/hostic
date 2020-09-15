@@ -12,18 +12,18 @@ const sitePath = resolve('site')
 
 let service
 let code
+let mod
 
 async function performUserSetup() {
   try {
-    global.basePath = sitePath
-    if (code) {
-      code = `(function(exports) {
-        ${code}
-        return exports;
-      })({})`
-      let result = eval(code)
-      return result.default(sitePath)
-    }
+    // global.basePath = sitePath
+    // if (code) {
+    //   code = `(function(exports) {
+    //     ${code}
+    //     return exports;
+    //   })({})`
+    //   module = eval(code)
+    return mod.default(sitePath)
   } catch (err) {
     console.error('Exception:', err)
   }
@@ -47,6 +47,22 @@ async function build() {
 
   let result = await service.build(options)
   code = new TextDecoder('utf-8').decode(result.outputFiles[0].contents)
+
+  try {
+    module = null
+    global.basePath = sitePath
+    if (code) {
+      code = `(function(exports) {
+        ${code}
+        return exports;
+      })({})`
+      mod = eval(code)
+      // return module.default(sitePath)
+    }
+  } catch (err) {
+    console.error('Exception:', err)
+  }
+
   return performUserSetup()
 }
 

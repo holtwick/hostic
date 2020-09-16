@@ -1,6 +1,7 @@
 module.exports = {
   STATUS_PAGE_PATH: '/$',
-  ASSETS_BASE_PATH: '/assets',
+  ASSETS_BASE_PATH: '/_assets',
+  EXPORT_INDEX_HTML: true,
   BUILD_TIMEOUT_MS: 5,
   PORT: 8080,
 }

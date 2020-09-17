@@ -25,7 +25,7 @@ export function cookieConsent(pluginOpt = {}) {
               <en>This website uses cookies to ensure you get the best experience on our website.</en>
               <de>Diese Website nutzt Cookies, um bestmögliche Funktionalität bieten zu können.</de>
               {' '}
-              <a href={privacyURL}>
+              <a href={privacyURL} data-ignore-check>
                 <en>Learn&nbsp;more</en>
                 <de>Mehr&nbsp;Informationen</de>
               </a>

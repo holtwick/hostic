@@ -4,7 +4,7 @@
   "description": "Yet another static web site generator",
   "main": "src/index.js",
   "scripts": {
-    "build:cli": "node src/cli-builder.js",
+    "build:cli": "node src/.deprecated/cli-builder.js",
     "test": "jest --no-cache",
     "prepublish": "npm test"
   },
@@ -46,12 +46,12 @@
     "esbuild": "^0.7.1",
     "express": "^4.17.1",
     "highlight.js": "^10.2.0",
-    "hostic-dom": "^0.8.2",
+    "hostic-dom": "^0.8.3",
     "image-size": "^0.9.1",
     "marked": "^1.1.1",
     "mime-types": "^2.1.27",
     "minimatch": "^3.0.4",
-    "postcss": "^8.0.2",
+    "postcss": "^8.0.5",
     "postcss-load-config": "^2.1.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",

@@ -2,7 +2,7 @@
 
 require('source-map-support/register')
 
-const hostic = require('./main.js')
+const hostic = require('./cli-main.js')
 hostic.main().then().catch(err => {
   process.exit(1)
 })

@@ -1,4 +1,3 @@
-const { reloadMiddleware } = require('./reload.js')
 const { normalizePath } = require('./utils/pathutil.js')
 const chokidar = require('chokidar')
 const mime = require('mime-types')
@@ -125,9 +124,7 @@ module.exports.startServer = function (
 </html>`
     return injectReload(html)
   }
-
-  app.use(reloadMiddleware)
-
+  
   app.use('/', (req, res) => {
     let path = decodeURIComponent(req.path)
     // console.info(`${new Date().toISOString()} - ${req.method} ${req.path}`)

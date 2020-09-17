@@ -1,3 +1,4 @@
+const { EXPORT_INDEX_HTML } = require('./config.js')
 const { getErrorStats } = require('./utils/error.js')
 const { duration } = require('./utils/perfutil.js')
 const { red, magenta, green, bold, blue, gray, underline } = require('chalk')
@@ -47,10 +48,13 @@ async function writeStatic({ site, time } = {}) {
         let { content, type } = await routes.render(path, { site })
         if (path && content) {
           if (path.endsWith('/')) {
-            path += 'index'
-          }
-          if (type === 'text/html' && !path.includes('.')) {
-            path += '.html'
+            path += 'index.html'
+          } else if (type === 'text/html' && !path.includes('.')) {
+            if (EXPORT_INDEX_HTML) {
+              path += '/index.html'
+            } else {
+              path += '.html'
+            }
           }
           print(`Write `)
           print(underline(`${path}`))

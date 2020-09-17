@@ -24,7 +24,6 @@ module.exports = {
       write: false,
       entryPoints: [filename],
     })
-
     return new TextDecoder('utf-8').decode(result.outputFiles[0].contents)
   },
 }

@@ -1,10 +1,10 @@
 const { setupEnv } = require('./lib/env.js')
-const { startServer } = require('./server.js')
-const { writeStatic } = require('./static.js')
-const esbuild = require('esbuild')
+const { startServer } = require('./cli-serve.js')
+const { writeStatic } = require('./cli-build.js')
 const { resolve } = require('path')
 const { buildOptions } = require('./build-options.js')
 const { duration } = require('./utils/perfutil.js')
+const esbuild = require('esbuild')
 
 const log = require('debug')('hostic:main')
 
@@ -16,13 +16,6 @@ let mod
 
 async function performUserSetup() {
   try {
-    // global.basePath = sitePath
-    // if (code) {
-    //   code = `(function(exports) {
-    //     ${code}
-    //     return exports;
-    //   })({})`
-    //   module = eval(code)
     return mod.default(sitePath)
   } catch (err) {
     console.error('Exception:', err)
@@ -66,7 +59,7 @@ async function build() {
   return performUserSetup()
 }
 
-async function main() {
+async function cliMain() {
   let time = duration()
 
   setupEnv()
@@ -95,4 +88,4 @@ async function main() {
   })
 }
 
-module.exports.main = main
+module.exports.main = cliMain

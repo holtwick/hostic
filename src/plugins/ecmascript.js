@@ -18,7 +18,7 @@ export function js(source) {
     global.__dirname = '/Users/dirk/work/hostic/node_modules/esbuild'
     let result = esbuild.buildSync({
       bundle: true,
-      sitemap: 'inline',
+      sourcemap: 'inline',
       target: 'es2015',
       platform: 'browser',
       loader: {
@@ -28,7 +28,7 @@ export function js(source) {
         '.md': 'text',
       },
       jsxFactory: 'h',
-      // minify: true,
+      minify: ctx.minify || ctx.minifyJavascript || false,
       // external: [
       //   ...Object.keys(pkg.dependencies ?? {}),
       //   ...Object.keys(pkg.devDependencies ?? {}),

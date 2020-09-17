@@ -2,7 +2,6 @@ import { warn } from '../utils/error.js'
 import { error } from '../utils/error.js'
 import { TYPE_HTML } from '../site/types.js'
 import { parseHTML } from 'hostic-dom'
-import { incrementErrorCount } from '../utils/error.js'
 
 export async function checkLinks(site) {
   const routes = site.routes
@@ -15,13 +14,15 @@ export async function checkLinks(site) {
         let { content } = await routes.render(path, { site })
         let body = parseHTML(content)
         body.querySelectorAll('a[href]').forEach(el => {
-          let href = el.getAttribute('href')
-          if (href.startsWith('/')) {
-            href = href.replace(/#.?$/, '')
-            if (!site.routes.has(href)) {
-              warn(`Invalid link to ${href} "${el.textContent}" (found in ${path})`)
-              issues += 1
-              incrementErrorCount()
+          if (el.getAttribute('data-ignore-check') == null) {
+            let href = el.getAttribute('href')
+            if (href.startsWith('/')) {
+              href = href.replace(/[#?].*$/, '')
+              if (!site.routes.has(href)) {
+                warn(`Invalid link to ${href} "${el.textContent}" (found in ${path})`)
+                issues += 1
+                // incrementErrorCount()
+              }
             }
           }
         })

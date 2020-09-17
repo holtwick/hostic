@@ -109,7 +109,7 @@ export class Routes {
       }
       return { error: 'Empty' }
     } catch (err) {
-      error('Route Exception:', err)
+      error(`Route Exception for path ${path}:`, err)
       // console.error(err)
       return { error: err.toString() }
     }

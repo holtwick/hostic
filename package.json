@@ -17,7 +17,7 @@
     "type": "git",
     "url": "https://github.com/holtwick/hostic.git"
   },
-  "license": "MIT",
+  "license": "EUPL",
   "jest": {
     "transform": {
       "^.+\\.jsx?$": "./src/jest-transform.js"

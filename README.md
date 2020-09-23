@@ -274,3 +274,14 @@ Read about it in [my blog](https://holtwick.de/blog/birth-of-hostic?ref=github&k
 
 I don't know... there are plenty of good tools around. But I stumbled into creating this one and then got fascinated by [esbuild](https://github.com/evanw/esbuild), [vite](https://github.com/vitejs/vite), the own virtual DOM and other details that where interesting to implement. For non geeky people it might be easier to start with something from the shelf like [11ty](https://www.11ty.dev/).
 
+## License
+ 
+Hostic is free and can be modified and forked. But the conditions of the EUPL (European Union Public License 1.2) need to be respected, which are similar to ones of the GPL. In particular modifications need to be free as well and made available to the public.
+
+For different licensing options please contact [license@holtwick.de](mailto:license@holtwick.de).  
+
+Get a quick overview of the license at [Choose an open source license](https://choosealicense.com/licenses/eupl-1.2/). This license is available in the [languages of the European Community](https://eupl.eu/).
+
+## Author
+
+My name is Dirk Holtwick. I'm an independent software developer located in Germany. Learn more at [hotlwick.de](https://holtwick.de/de/about).

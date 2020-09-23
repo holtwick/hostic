@@ -1,22 +1,49 @@
 const { red, yellow } = require('chalk')
 
 global.errorStats = {}
+global.errorCallback = null
 
-module.exports.clearErrorStats = function clearErrorStats() {
+function clearErrorStats() {
   global.errorStats.errors = 0
   global.errorStats.warnings = 0
+  global.errorStats.messages = []
 }
 
-module.exports.getErrorStats = function getErrorStats() {
+clearErrorStats()
+
+//
+
+function getErrorStats() {
   return { ...global.errorStats }
 }
 
-module.exports.incrementErrorCount = function incrementErrorCount() {
+function incrementErrorCount() {
   ++global.errorStats.errors
 }
 
-module.exports.error = function error(...args) {
-  console.error(red('\nError: ' + (args.map(a => a.toString()).join(' '))))
+function setErrorCallback(fn = null) {
+  global.errorCallback = fn
+}
+
+function prepareMessage(args, level) {
+  const message = (args.map(a => a.toString()).join(' '))
+  const now = new Date()
+  let info = {
+    message,
+    level,
+    datetime: now.toISOString(),
+    timestamp: now.getTime(),
+  }
+  global.errorStats.messages.push(info)
+  if (global.errorCallback) {
+    global.errorCallback(info)
+  }
+  return info
+}
+
+function error(...args) {
+  let msg = prepareMessage(args, 'error')
+  console.error(red('\nError: ' + msg.message))
   incrementErrorCount()
   let err = args.find(a => a instanceof Error)
   if (err) {
@@ -26,8 +53,9 @@ module.exports.error = function error(...args) {
   }
 }
 
-module.exports.warn = function warn(...args) {
-  console.error(yellow('\nWarning: ' + (args.map(a => a.toString()).join(' '))))
+function warn(...args) {
+  let msg = prepareMessage(args, 'warn')
+  console.error(yellow('\nWarning: ' + msg.message))
   ++global.errorStats.warnings
   let err = args.find(a => a instanceof Error)
   if (err) {
@@ -35,4 +63,12 @@ module.exports.warn = function warn(...args) {
   }
 }
 
-module.exports.clearErrorStats()
+module.exports = {
+  clearErrorStats,
+  getErrorStats,
+  incrementErrorCount,
+  error,
+  warn,
+  setErrorCallback
+}
+

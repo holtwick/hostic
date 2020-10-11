@@ -16,7 +16,7 @@ export async function checkLinks(site) {
         body.querySelectorAll('a[href]').forEach(el => {
           if (el.getAttribute('data-ignore-check') == null) {
             let href = el.getAttribute('href')
-            if (href.startsWith('/')) {
+            if (href.startsWith('/') && !href.startsWith('/goto/')) {
               href = href.replace(/[#?].*$/, '')
               if (!site.routes.has(href)) {
                 warn(`Invalid link to ${href} "${el.textContent}" (found in ${path})`)

@@ -14,7 +14,7 @@ export function absolute({
                          }) {
   body.handle('a[href]', e => {
     let href = e.getAttribute('href')
-    if (/^(mailto:|data:|https?:)/.test(href)) {
+    if (/^(mailto:|data:|https?:|\/goto\/)/.test(href)) {
       if (!allAbsolute) {
         if (href.startsWith(site.baseURL)) {
           e.setAttribute('href', href.substr(site.baseURL.length))

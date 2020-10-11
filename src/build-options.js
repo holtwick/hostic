@@ -18,5 +18,7 @@ module.exports.buildOptions = {
     // ...Object.keys(pkg.devDependencies ?? {}),
     // ...Object.keys(pkg.peerDependencies ?? {}),
     'esbuild',
+    'postcss',
+    'postcss-load-config'
   ]
 }

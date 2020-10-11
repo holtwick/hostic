@@ -64,11 +64,12 @@ async function cliMain() {
 
   setupEnv()
 
-  // console.log('env =', process.env.BASE_URL)
+  log('env =', process.env.BASE_URL)
 
   // BUILD STATIC SITE
   const STATIC = process.argv.includes('--build') || process.argv.includes('build')
   if (STATIC) {
+    log('build a static site')
     if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
     let site = await build()
     await writeStatic({ site, time })
@@ -80,6 +81,7 @@ async function cliMain() {
     process.env.NODE_ENV = 'development'
   }
 
+  log('start server')
   startServer({
     performUserSetup,
     sitePath,

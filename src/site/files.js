@@ -8,43 +8,47 @@ const { walkSync } = require('../utils/fileutil')
 
 const log = require('debug')('hostic:files')
 
-let cache = {}
-
 export function getContent(path) {
   try {
-    // let content = cache[path]
-    // if (!content) {
-    let content = readFileSync(path)
-    //   cache[path] = content
-    // }
-    return content
+    return readFileSync(path)
   } catch (err) {
     warn('Can\'t get content of', path)
   }
 }
 
 export function getStat(path) {
-  return statSync(path)
+  try {
+    return statSync(path)
+  } catch (err) {
+    return null
+  }
 }
 
 function getBasePath(basePath = null) {
   return resolve(global.basePath || process.cwd(), basePath || '.')
 }
 
-function file(path, {basePath = null}) {
+function file(path, { basePath = null, stat = false }) {
   if (basePath == null) {
     basePath = getBasePath()
   }
   const fullPath = resolve(basePath, path)
+
   let { name, ext } = parsePath(path)
 
-  return {
+  let info = {
     path,
     basePath,
     fullPath,
     name,
     ext,
   }
+
+  if (stat) {
+    info.stat = getStat(fullPath)
+  }
+
+  return info
 }
 
 export function files({
@@ -53,6 +57,7 @@ export function files({
                         filter,
                         path,
                         dotfiles = 'ignore',
+                        stat = false,
                         // extensions = []
                       } = {}) {
   // Filter files
@@ -94,6 +99,6 @@ export function files({
 
   return paths.map(path => {
     log('path', path)
-    return file(path, { basePath })
+    return file(path, { basePath, stat })
   })
 }

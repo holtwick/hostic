@@ -1,4 +1,5 @@
 import { files } from './files.js'
+import { getStat } from './files.js'
 
 describe('Files', () => {
 
@@ -27,13 +28,19 @@ describe('Files', () => {
       ])
     }
     {
-      let ff = files({ pattern: /^[^/]*\.json$/ })
+      let ff = files({ pattern: /^[^/]*\.json$/, stat: true })
       expect(ff.length).toEqual(2)
+      expect(ff[0].stat.size).toEqual(217357)
     }
     {
       let ff = files({ basePath: 'src/site/renderer' })
       expect(ff.length).toEqual(6)
     }
+  })
+
+  it('should stat', () => {
+    let stat = getStat('12345')
+    expect(stat).toEqual(null)
   })
 
 })

@@ -22,13 +22,15 @@
 
 import { getFile } from '../site/files.js'
 import { getArticle } from './articles.js'
+import { resolve } from 'url'
+import { normalizePath } from '../utils/pathutil.js'
 
 export function releases({
                            site,
                            files,
                            requiresMarkdown = false,
-                         } = {})
-{
+                           downloadFolder = 'download',
+                         } = {}) {
   let entries = files
     .map(({ path, basePath }) => {
       const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
@@ -65,12 +67,12 @@ export function releases({
           version,
           fullVersion,
           build,
-          // md,
           path,
+          url: resolve(normalizePath(downloadFolder, true), path),
           prefix,
           descPath,
           descFile,
-          desc
+          desc,
         }
       }
     })

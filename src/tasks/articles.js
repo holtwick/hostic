@@ -1,7 +1,33 @@
 import { parseDate } from '../utils/dateutils.js'
 import { getStat } from '../site/files.js'
 import { markdown } from '../utils/markdown.js'
-import { parseMarkdown } from '../utils/markdown.js'
+
+// class Article {
+//
+//   constructor(props) {
+//     Object.assign(this, props)
+//     this._body = null
+//   }
+//
+//   get body() {
+//     if (this._body == null) {
+//       console.log(this)
+//       if (this.sourceType === 'markdown') {
+//         this.markdown = this.site.readMarkdown(this.sourceFile, { path: this.path })
+//         this._body = this.markdown.body
+//       } else {
+//         this.html = this.site.readHTML(this.sourceFile, { path: this.path })
+//         this._body = this.html.body
+//       }
+//     }
+//     return this._body
+//   }
+//
+//   set body(body) {
+//     this._body = body
+//   }
+//
+// }
 
 export function getArticle({
                              file,

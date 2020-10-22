@@ -51,7 +51,7 @@ export class Site {
     }
 
     this.checks = [
-      checkLinks
+      checkLinks,
     ]
 
     if (baseURL == null) {
@@ -149,11 +149,7 @@ export class Site {
     return { body }
   }
 
-  // _markdownCache = {}
-
   readMarkdownProperties(path) {
-    // let props = this._markdownCache[path]
-    // if (!props) {
     let data, sourcePath
     if (typeof path === 'string') {
       data = this.read(path)
@@ -164,8 +160,6 @@ export class Site {
     }
     let props = parseMarkdownStructure(data)
     props.sourcePath = sourcePath
-    //   this._markdownCache[path] = props
-    // }
     return props
   }
 

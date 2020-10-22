@@ -1,13 +1,25 @@
 import { parseDate } from '../utils/dateutils.js'
 import { getStat } from '../site/files.js'
+import { markdown } from '../utils/markdown.js'
+import { parseMarkdown } from '../utils/markdown.js'
 
-export function getArticle({ file, site, routePath = '/' }) {
+export function getArticle({
+                             file,
+                             site,
+                             routePath = '/',
+                             body = false,
+                           }) {
   let props = {
     sourceType: 'html',
   }
 
   if (['.md', '.mdown', '.markdown'].includes(file.ext)) {
-    props = site.readMarkdownProperties(file) || {}
+
+    if (body) {
+      props = site.readMarkdown(file) || {}
+    } else {
+      props = site.readMarkdownProperties(file) || {}
+    }
     props.sourceType = 'markdown'
   }
 

@@ -50,7 +50,7 @@ export function releases({
       if (!descFile.stat) {
         descFile = null
       } else {
-        desc = getArticle({ site, file: descFile })
+        desc = getArticle({ site, file: descFile, body: true })
       }
 
       if (!requiresMarkdown || descPath) {
@@ -110,7 +110,6 @@ export function releases({
     }
   }
 
-  console.log('entries', entries)
   return {
     latest,
     latestBeta,

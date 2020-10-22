@@ -28,7 +28,7 @@ function getBasePath(basePath = null) {
   return resolve(global.basePath || process.cwd(), basePath || '.')
 }
 
-function file(path, { basePath = null, stat = false }) {
+export function getFile(path, { basePath = null, stat = false }) {
   if (basePath == null) {
     basePath = getBasePath()
   }
@@ -99,6 +99,6 @@ export function files({
 
   return paths.map(path => {
     log('path', path)
-    return file(path, { basePath, stat })
+    return getFile(path, { basePath, stat })
   })
 }

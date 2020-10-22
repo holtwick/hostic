@@ -20,14 +20,17 @@
 
  */
 
+import { getFile } from '../site/files.js'
+import { getArticle } from './articles.js'
+
 export function releases({
                            site,
                            files,
                            requiresMarkdown = false,
-                         } = {}) {
-  console.log('files', files)
+                         } = {})
+{
   let entries = files
-    .map(({ path }) => {
+    .map(({ path, basePath }) => {
       const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
@@ -41,15 +44,19 @@ export function releases({
       const build = +r[13] || 0
 
       let descPath = `${prefix}${version}.md`
-      // if (!existsSync(site.path(descPath))) {
-      //   descPath = null
-      // }
+
+      let desc = null
+      let descFile = getFile(descPath, { basePath, stat: true })
+      if (!descFile.stat) {
+        descFile = null
+      } else {
+        desc = getArticle({ site, file: descFile })
+      }
 
       if (!requiresMarkdown || descPath) {
-        //   const stat = statSync(site.path(path)) || {}
         return {
-          // date: stat.mtime, // creation time
-          // size: stat.size,
+          date: descFile.stat.mtime, // creation time
+          size: descFile.stat.size,
           major,
           minor,
           patch,
@@ -62,6 +69,8 @@ export function releases({
           path,
           prefix,
           descPath,
+          descFile,
+          desc
         }
       }
     })
@@ -105,6 +114,6 @@ export function releases({
   return {
     latest,
     latestBeta,
-    entries
+    entries,
   }
 }

@@ -28,11 +28,10 @@ export function getArticle({ file, site, routePath = '/' }) {
   }
   props.date = date || null
 
-  let path = `${routePath}/${slug}`
-  props.path = path
+  props.path = `${routePath}/${slug}`
   props.sourceFile = file
 
-  return { props, path }
+  return props
 }
 
 export function getArticleBody({ ctx, site }) {
@@ -52,7 +51,7 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
 
   files.forEach(file => {
 
-    let { props, path } = getArticle({ file, site, routePath })
+    let { path, ...props } = getArticle({ file, site, routePath })
 
     if (handleProps) {
       if (handleProps(props) === false) {

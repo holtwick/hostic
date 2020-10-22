@@ -22,7 +22,7 @@ export function handleLinks(body, handler, {
         let isAnchor = href.startsWith('#')
 
         // http://
-        let isExternal = /^(mailto:|data:|https?:)/.test(href)
+        let isExternal = /^(mailto:|data:|https?:)/.test(href) || element?.getAttribute('data-download') || element?.classList?.contains('download')
 
         // /favicon.ico
         let isInternal = !isExternal && !isAnchor

@@ -27,6 +27,26 @@ export function getStat(path) {
   return statSync(path)
 }
 
+function getBasePath(basePath = null) {
+  return resolve(global.basePath || process.cwd(), basePath || '.')
+}
+
+function file(path, {basePath = null}) {
+  if (basePath == null) {
+    basePath = getBasePath()
+  }
+  const fullPath = resolve(basePath, path)
+  let { name, ext } = parsePath(path)
+
+  return {
+    path,
+    basePath,
+    fullPath,
+    name,
+    ext,
+  }
+}
+
 export function files({
                         basePath,
                         pattern,
@@ -36,7 +56,7 @@ export function files({
                         // extensions = []
                       } = {}) {
   // Filter files
-  basePath = resolve(global.basePath || process.cwd(), basePath || '.')
+  basePath = getBasePath(basePath)
   log('basePath', basePath)
 
   let paths = walkSync(basePath)
@@ -74,15 +94,6 @@ export function files({
 
   return paths.map(path => {
     log('path', path)
-    const fullPath = resolve(basePath, path)
-    let { name, ext } = parsePath(path)
-
-    return {
-      path,
-      basePath,
-      fullPath,
-      name,
-      ext,
-    }
+    return file(path, { basePath })
   })
 }

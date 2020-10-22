@@ -1,5 +1,7 @@
 // (C)opyright 2020-10-22 Dirk Holtwick, holtwick.it. All rights reserved.
 
+import { normalizePath } from '../utils/pathutil.js'
+
 export function sparkle(
   {
     site,
@@ -10,6 +12,19 @@ export function sparkle(
     lang = 'en',
     publicURL,
   }) {
+
+  let feednotes = normalizePath(path + '.html')
+
+  site.html(feednotes, ctx => {
+    ctx.skipTemplate = true // just a convention
+    ctx.title = title
+    ctx.body = <div>
+      {releases.entries.filter(r => !r.beta).map(r => <div>
+        <h3>{r.version}</h3>
+        {r.desc.body.cloneNode(true)}
+      </div>)}
+    </div>
+  })
 
   site.xml(path, ctx => {
     let { url } = ctx
@@ -59,7 +74,7 @@ export function sparkle(
               {/*</div>)}*/}
             </cdata>
           </description>
-          <sparkle__releaseNotesLink>{site.baseURL}/sparklecast.html</sparkle__releaseNotesLink>
+          <sparkle__releaseNotesLink>{site.baseURL}${feednotes}</sparkle__releaseNotesLink>
           <pubDate>{r.date?.toGMTString()}</pubDate>
           <enclosure url={`${site.baseURL}${r.url}`}
                      length={r.size?.toString()}

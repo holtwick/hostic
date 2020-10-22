@@ -55,6 +55,8 @@ export function releases({
         desc = getArticle({ site, file: descFile, body: true })
       }
 
+      let url = resolve(normalizePath(downloadFolder, true), path)
+
       if (!requiresMarkdown || descPath) {
         return {
           date: descFile.stat.mtime, // creation time
@@ -68,7 +70,7 @@ export function releases({
           fullVersion,
           build,
           path,
-          url: resolve(normalizePath(downloadFolder, true), path),
+          url,
           prefix,
           descPath,
           descFile,

@@ -24,6 +24,7 @@ import { getFile } from '../site/files.js'
 import { getArticle } from './articles.js'
 import { resolve } from 'url'
 import { normalizePath } from '../utils/pathutil.js'
+import { getStat } from '../site/files.js'
 
 export function releases({
                            site,
@@ -32,7 +33,7 @@ export function releases({
                            downloadFolder = 'download',
                          } = {}) {
   let entries = files
-    .map(({ path, basePath }) => {
+    .map(({ path, basePath, fullPath }) => {
       const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
@@ -60,7 +61,7 @@ export function releases({
       if (!requiresMarkdown || descPath) {
         return {
           date: descFile.stat.mtime, // creation time
-          size: descFile.stat.size,
+          size: getStat(fullPath).size,
           major,
           minor,
           patch,

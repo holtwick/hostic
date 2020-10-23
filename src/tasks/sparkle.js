@@ -26,6 +26,8 @@ export function sparkle(
         </div>)}
       </div>
     })
+  } else {
+    feednotesURL = normalizePath(feednotesURL)
   }
 
   site.xml(path, ctx => {
@@ -63,7 +65,7 @@ export function sparkle(
               {/*</div>)}*/}
             </cdata>
           </description>
-          <sparkle__releaseNotesLink>{site.baseURL}${feednotesURL}</sparkle__releaseNotesLink>
+          <sparkle__releaseNotesLink>{site.baseURL}{feednotesURL}</sparkle__releaseNotesLink>
           <pubDate>{r.date?.toGMTString()}</pubDate>
           <enclosure url={`${site.baseURL}${r.url}`}
                      length={r.size?.toString()}

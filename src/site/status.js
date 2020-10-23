@@ -26,7 +26,7 @@ export async function status(ctx) {
           `}</style>
     <h1>Hostic Status</h1>
     <p>
-      Base URL: <a href={baseURL}>{baseURL}</a>
+      Base URL: <a href="/">{baseURL}</a>
     </p>
     <h3>Routes</h3>
     <table>
@@ -43,7 +43,11 @@ export async function status(ctx) {
           <td align={'right'}>{i.toString()}</td>
           <td><a href={r.path}>{r.path}</a></td>
           <td>{r.title}</td>
-          <td><pre>{r}</pre></td>
+          <td>
+            {Object.entries(r).filter(([k, v]) => typeof v !== 'function').map(([k, v]) => {
+              return <div><b>{k}</b> = {v}</div>
+            })}
+          </td>
         </tr>)}
     </table>
   </div>

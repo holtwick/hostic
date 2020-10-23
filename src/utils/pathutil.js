@@ -3,6 +3,7 @@ const { parse } = require('path')
 module.exports.normalizePath = function normalizePath(path, isFolder = false) {
   if (typeof path !== 'string') {
     console.warn('Invalid path', path)
+    return path
   }
   if (!path.startsWith('/')) {
     path = '/' + path

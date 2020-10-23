@@ -95,8 +95,6 @@ export function atom(
               })
               body.handle('iframe', e => e.remove())
 
-
-
               html = body.render()
             }
             if (html) {

@@ -22,15 +22,18 @@
 
 import { getFile } from '../site/files.js'
 import { getArticle } from './articles.js'
+import { resolve } from 'url'
+import { normalizePath } from '../utils/pathutil.js'
+import { getStat } from '../site/files.js'
 
 export function releases({
                            site,
                            files,
                            requiresMarkdown = false,
-                         } = {})
-{
+                           downloadFolder = 'download',
+                         } = {}) {
   let entries = files
-    .map(({ path, basePath }) => {
+    .map(({ path, basePath, fullPath }) => {
       const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
       // console.log('r', r)
       const prefix = r[1]
@@ -53,10 +56,12 @@ export function releases({
         desc = getArticle({ site, file: descFile, body: true })
       }
 
+      let url = resolve(normalizePath(downloadFolder, true), path)
+
       if (!requiresMarkdown || descPath) {
         return {
           date: descFile.stat.mtime, // creation time
-          size: descFile.stat.size,
+          size: getStat(fullPath).size,
           major,
           minor,
           patch,
@@ -65,12 +70,12 @@ export function releases({
           version,
           fullVersion,
           build,
-          // md,
           path,
+          url,
           prefix,
           descPath,
           descFile,
-          desc
+          desc,
         }
       }
     })

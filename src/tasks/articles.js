@@ -89,7 +89,7 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
 
   files.forEach(file => {
 
-    let { path, ...props } = getArticle({ file, site, routePath })
+    let props = getArticle({ file, site, routePath })
 
     if (handleProps) {
       if (handleProps(props) === false) {
@@ -98,7 +98,7 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
     }
 
     site.html(
-      path,
+      props.path,
       props,
       ctx => {
         getArticleBody({ ctx, site })

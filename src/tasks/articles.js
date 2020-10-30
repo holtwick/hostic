@@ -66,6 +66,9 @@ export function getArticle({
   }
   props.date = date || null
 
+  // Slug normalization
+  slug = slug.replace(/[^\p{L}[0-9]+/gmu, '-')
+
   props.path = `${routePath}/${slug}`
   props.sourceFile = file
 

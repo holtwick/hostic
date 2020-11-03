@@ -49,7 +49,7 @@ async function writeStatic({ site, time } = {}) {
         if (path && content) {
           if (path.endsWith('/')) {
             path += 'index.html'
-          } else if (type === 'text/html' && !path.includes('.')) {
+          } else if (type === 'text/html' && !path.toLowerCase().endsWith('.html')) {
             if (EXPORT_INDEX_HTML) {
               path += '/index.html'
             } else {

@@ -45,9 +45,7 @@ export function youtube(pluginOpt = {}) {
 
             root.replaceWith(
               <div className="video-wrapper">
-                <a href={staticLink} onClick={onClick} style={`background-image:url("${thumbnailURL}");`} title={videoTitle}>
-                  &nbsp;
-                </a>
+                <a href={staticLink} onClick={onClick} style={`background-image:url("${thumbnailURL}");`} title={videoTitle}></a>
                 <div className="video-overlay-content">
                   <div className="video-overlay-inner">
                     <svg className="video-overlay-play-button" viewBox="0 0 200 200">

@@ -18,6 +18,10 @@
     - `latest`: The latest non beta version
     - `latestBeta`: The latest beta version, if not `latest` is newer, then `null`
 
+  Attention!
+
+    - Never use target=_blank in release notes https://github.com/sparkle-project/Sparkle/issues/430
+
  */
 
 import { getFile } from '../site/files.js'

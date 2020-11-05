@@ -8,7 +8,9 @@ import { resolve } from 'url'
  */
 
 export function absolute({
-                           body, path, site,
+                           body,
+                           path,
+                           site,
                            targetBlank = true,   // Add target=_blank for external links
                            allAbsolute = false,  // Add baseURL to all local links
                          }) {

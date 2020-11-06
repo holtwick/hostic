@@ -60,7 +60,7 @@ export function meta(pluginOpt = {}) {
         document.documentElement.setAttribute('lang', lang)
         // head.appendChild(<meta property="og:locale" content={lang}/>)
         if (url) {
-          head.appendChild(<link rel="alternate" hrefLang={lang} href={url}/>)
+          head.appendChild(<link rel="alternate" hreflang={lang} href={url}/>)
         }
       }
 
@@ -71,7 +71,7 @@ export function meta(pluginOpt = {}) {
           if (lang === '' || lang === '*') {
             lang = 'x-default' // https://www.sistrix.de/frag-sistrix/onpage-optimierung/wie-nutze-ich-das-x-default-hreflang-link-attribut-richtig/
           }
-          head.appendChild(<link rel="alternate" hrefLang={lang} href={href}/>)
+          head.appendChild(<link rel="alternate" hreflang={lang} href={href}/>)
         }
       }
 

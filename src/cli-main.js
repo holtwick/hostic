@@ -2,6 +2,7 @@ const { setupEnv } = require('./lib/env.js')
 const { startServer } = require('./cli-serve.js')
 const { writeStatic } = require('./cli-build.js')
 const { resolve } = require('path')
+const { writeFileSync } = require('fs')
 const { buildOptions } = require('./build-options.js')
 const { duration } = require('./utils/perfutil.js')
 const esbuild = require('esbuild')
@@ -45,12 +46,32 @@ async function build() {
     module = null
     global.basePath = sitePath
     if (code) {
-      code = `(function(exports) {
-        ${code}
-        return exports;
-      })({})`
-      mod = eval(code)
+
+      // Variant A
+      if (false) {
+        code = `(function(exports) {
+          ${code}
+          return exports;
+        })({})`
+        mod = eval(code)
+      }
+
+      // Variant B
+      if (true) {
+        let exports = {}
+        eval(code)
+        mod = exports
+      }
+
       // return module.default(sitePath)
+
+      // Variant C
+      if (false) {
+        const BUNDLE = resolve('.hostic-bundle.js')
+        writeFileSync(BUNDLE, code, 'utf8')
+        delete require.cache[require.resolve(BUNDLE)]
+        mod = require(BUNDLE)
+      }
     }
   } catch (err) {
     console.error('Exception:', err)

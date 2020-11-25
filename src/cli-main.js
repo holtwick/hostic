@@ -1,3 +1,4 @@
+const {error} = require("./utils/error.js")
 const {setupEnv} = require("./lib/env.js")
 const {startServer} = require("./cli-serve.js")
 const {writeStatic} = require("./cli-build.js")
@@ -19,7 +20,7 @@ async function performUserSetup() {
   try {
     return mod.default(sitePath)
   } catch (err) {
-    console.error("Exception:", err)
+    error("Error executing", err)
   }
 }
 
@@ -46,7 +47,8 @@ async function build() {
     module = null
     global.basePath = sitePath
     if (code) {
-      const mode = 3
+      const mode = 2
+
       // Variant A
       if (mode === 1) {
         code = `(function(exports) {
@@ -57,24 +59,27 @@ async function build() {
       }
 
       // Variant B
-      if (mode === 2) {
+      else if (mode === 2) {
         let exports = {}
         eval(code)
         mod = exports
       }
- 
+
       // Variant C
-      if (mode === 3) {
+      else if (mode === 3) {
         console.info(`cwd ${process.cwd()}`)
         const BUNDLE = resolve(__dirname, "hostic-bundle.js")
         writeFileSync(BUNDLE, code, "utf8")
         delete require.cache[require.resolve(BUNDLE)]
         mod = require(BUNDLE)
         unlinkSync(BUNDLE)
+      } else {
+        error("Invalid code loading mode", mode)
       }
     }
   } catch (err) {
-    console.error("Exception:", err)
+    error(`Problem transpiling`, err)
+    // console.error("Exception:", err)
   }
 
   return performUserSetup()

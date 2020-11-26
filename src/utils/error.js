@@ -46,6 +46,7 @@ function error(...args) {
   console.error(red('\nError: ' + msg.message))
   incrementErrorCount()
   let err = args.find(a => a instanceof Error)
+  console.log('ERRRS', args)
   if (err) {
     console.error(err)
   } else {

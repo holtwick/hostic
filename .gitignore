@@ -21,3 +21,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 src/.deprecated
+src/out

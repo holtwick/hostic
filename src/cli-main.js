@@ -7,6 +7,7 @@ const {writeFileSync, unlinkSync} = require("fs")
 const {buildOptions} = require("./build-options.js")
 const {duration} = require("./utils/perfutil.js")
 const esbuild = require("esbuild")
+const {evalCode} = require("./code-utils.js")
 
 const log = require("debug")("hostic:main")
 
@@ -14,6 +15,7 @@ const sitePath = resolve("site")
 
 let service
 let code
+let sourcemap
 let mod
 
 async function performUserSetup() {
@@ -32,22 +34,39 @@ async function build() {
     log("ESBuild service", service)
   }
 
+  const sourceMapExternal = false
+
   // https://github.com/evanw/esbuild#command-line-usage
   const options = {
     ...buildOptions,
     entryPoints: [sitePath + "/index.js"],
     write: false,
   }
+
+  if (sourceMapExternal) {
+    options.sourcemap = "external"
+    options.outdir = __dirname + "/out"
+  }
+
   log("Build options", options)
 
   let result = await service.build(options)
-  code = new TextDecoder("utf-8").decode(result.outputFiles[0].contents)
+  for (let out of result.outputFiles) {
+    console.info("output", out.path)
+    if (out.path.endsWith(".js.map")) {
+      sourcemap = new TextDecoder("utf-8").decode(out.contents)
+    } else {
+      code = new TextDecoder("utf-8").decode(out.contents)
+    }
+  }
 
   try {
     module = null
     global.basePath = sitePath
     if (code) {
       const mode = 2
+
+      const BUNDLE = resolve(process.cwd(), "index.min.js")
 
       // Variant A
       if (mode === 1) {
@@ -60,19 +79,25 @@ async function build() {
 
       // Variant B
       else if (mode === 2) {
+        mod = evalCode(code, sourcemap, BUNDLE)
+      }
+
+      // Variant C
+      else if (mode === 3) {
         let exports = {}
         eval(code)
         mod = exports
       }
 
-      // Variant C
-      else if (mode === 3) {
-        console.info(`cwd ${process.cwd()}`)
-        const BUNDLE = resolve(__dirname, "hostic-bundle.js")
+      // Variant D
+      else if (mode === 4) {
+        // code = code.replace('//# sourceMappingURL=index.js.map', '//# sourceMappingURL=hostic-bundle.js.map')
         writeFileSync(BUNDLE, code, "utf8")
+        if (sourceMapExternal) writeFileSync(BUNDLE + ".map", sourcemap, "utf8")
         delete require.cache[require.resolve(BUNDLE)]
         mod = require(BUNDLE)
         unlinkSync(BUNDLE)
+        if (sourceMapExternal) unlinkSync(BUNDLE + ".map")
       } else {
         error("Invalid code loading mode", mode)
       }

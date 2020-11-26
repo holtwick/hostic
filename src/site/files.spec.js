@@ -1,5 +1,6 @@
 import { files } from './files.js'
 import { getStat } from './files.js'
+import { getFingerprint } from './files.js'
 
 describe('Files', () => {
 
@@ -36,6 +37,15 @@ describe('Files', () => {
       let ff = files({ basePath: 'src/site/renderer' })
       expect(ff.length).toEqual(6)
     }
+
+    // Fingerprint
+  })
+
+  it('should fingerprint', () => {
+    let file = __dirname + '/files.js'
+    let a = getFingerprint(file)
+    let b = getFingerprint(file)
+    expect(a).toEqual(b)
   })
 
   it('should stat', () => {

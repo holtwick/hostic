@@ -85,7 +85,7 @@ export function getArticleBody({ ctx, site }) {
   }
 }
 
-export function articles({ site, files, handleProps, routePath, body } = {}) {
+export function articles({ site, files, handleProps, routePath = '/', body } = {}) {
   let bodyFn = body
 
   routePath = routePath.endsWith('/') ? routePath.slice(0, -1) : routePath

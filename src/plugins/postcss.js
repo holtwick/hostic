@@ -2,6 +2,10 @@ const { readFileSync } = require('fs')
 const postcss = require('postcss')
 const postcssrc = require('postcss-load-config')
 
+// Add clean-css minification?
+// https://github.com/jakubpawlowicz/clean-css
+// npm install --save-dev clean-css
+
 const log = require('debug')('hostic:mw:postcss')
 
 export function css(source) {

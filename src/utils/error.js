@@ -49,8 +49,8 @@ function error(...args) {
   let err = args.find(a => a instanceof Error)
   if (err) {
     console.error(err)
-  } else {
-    console.trace()
+    // } else {
+    //   console.trace()
   }
 }
 

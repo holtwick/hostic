@@ -1,3 +1,5 @@
+import {warn} from "../utils/error"
+
 const { readFileSync } = require('fs')
 const postcss = require('postcss')
 const postcssrc = require('postcss-load-config')
@@ -15,12 +17,17 @@ export function css(source) {
 
     const css = readFileSync(source, 'utf8')
 
-    // https://www.npmjs.com/package/postcss-load-config#sync
-    const { plugins, options } = postcssrc.sync({ parser: true, map: 'inline' })
+    try {
+      // https://www.npmjs.com/package/postcss-load-config#sync
+      const {plugins, options} = postcssrc.sync({parser: true, map: 'inline'})
 
-    let result = await postcss(plugins).process(css, { from: source, to: source })
-
-    ctx.body = result.css
+      let result = await postcss(plugins).process(css, {from: source, to: source})
+      ctx.body = result.css
+    }
+    catch (e) {
+      warn("Problems with PostCSS setup", e)
+      ctx.body = source
+    }
 
     await next()
 

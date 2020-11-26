@@ -165,7 +165,7 @@ export function meta(pluginOpt = {}) {
       }
 
       if (!ctx.body.querySelector('meta[charset]')) {
-        head.insertBefore(<meta charSet="utf-8"/>)
+        head.insertBefore(<meta charset="utf-8"/>)
       }
     },
   }

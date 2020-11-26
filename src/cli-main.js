@@ -22,7 +22,7 @@ async function performUserSetup() {
   try {
     return mod.default(sitePath)
   } catch (err) {
-    error("Error executing", err)
+    error(err)
   }
 }
 
@@ -68,7 +68,7 @@ async function build() {
 
       const BUNDLE = resolve(process.cwd(), "index.min.js")
 
-      // Variant A
+      // Variant A - Cannot work for SourceMaps
       if (mode === 1) {
         code = `(function(exports) {
           ${code}
@@ -77,19 +77,19 @@ async function build() {
         mod = eval(code)
       }
 
-      // Variant B
+      // Variant B - Winner!
       else if (mode === 2) {
         mod = evalCode(code, sourcemap, BUNDLE)
       }
 
-      // Variant C
+      // Variant C - Does not work for SourceMaps
       else if (mode === 3) {
         let exports = {}
         eval(code)
         mod = exports
       }
 
-      // Variant D
+      // Variant D - Does write real files, not a good idea
       else if (mode === 4) {
         // code = code.replace('//# sourceMappingURL=index.js.map', '//# sourceMappingURL=hostic-bundle.js.map')
         writeFileSync(BUNDLE, code, "utf8")

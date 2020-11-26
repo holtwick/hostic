@@ -64,7 +64,7 @@ export function releases({
 
       if (!requiresMarkdown || descPath) {
         return {
-          date: descFile.stat.mtime, // creation time
+          date: descFile?.stat?.mtime, // creation time
           size: getStat(fullPath).size,
           major,
           minor,

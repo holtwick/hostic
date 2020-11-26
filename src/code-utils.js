@@ -7,12 +7,12 @@ const sourcePathToSource = Object.create(null)
 
 const sourceMapSupport = require("source-map-support")
 
-var origWrapper = sourceMapSupport.wrapCallSite
-var wrapCallSite = function (frame) {
-  console.log("KILLroy was here")
-  var frame = origWrapper(frame)
-  return frame
-}
+// var origWrapper = sourceMapSupport.wrapCallSite
+// var wrapCallSite = function (frame) {
+//   console.log("KILLroy was here")
+//   var frame = origWrapper(frame)
+//   return frame
+// }
 
 sourceMapSupport.install({
   // environment: "node",
@@ -22,11 +22,11 @@ sourceMapSupport.install({
 
   hookRequire: true,
 
-  wrapCallSite,
+  // wrapCallSite,
 
   handleUncaughtExceptions: false,
   retrieveFile: (sourcePath) => {
-    console.log("retrieveFile", sourcePath, sourcePathToSource[sourcePath]?.length)
+    // console.log("retrieveFile", sourcePath, sourcePathToSource[sourcePath]?.length)
     return sourcePathToSource[sourcePath]
   },
   // retrieveSourceMap: (sourcePath) => {

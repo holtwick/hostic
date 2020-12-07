@@ -12,6 +12,7 @@ import { yamlRender } from './renderer/yaml.js'
 import { baseRender } from './renderer/base.js'
 import { STATUS_PAGE_PATH } from '../config.js'
 import { error } from '../utils/error.js'
+import { warn } from '../utils/error.js'
 
 const log = require('debug')('hostic:routes')
 
@@ -83,6 +84,10 @@ export class Routes {
       log('Render page', page)
 
       let { type, next } = page
+
+      if (type != null && !type.includes('/')) {
+        warn(`Suspicious page content type: ${type}`)
+      }
 
       let renderer = this._renderer[type] || this._defaultRenderer
 

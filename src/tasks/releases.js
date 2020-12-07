@@ -18,6 +18,10 @@
     - `latest`: The latest non beta version
     - `latestBeta`: The latest beta version, if not `latest` is newer, then `null`
 
+  Attention!
+
+    - Never use target=_blank in release notes https://github.com/sparkle-project/Sparkle/issues/430
+
  */
 
 import { getFile } from '../site/files.js'
@@ -60,7 +64,7 @@ export function releases({
 
       if (!requiresMarkdown || descPath) {
         return {
-          date: descFile.stat.mtime, // creation time
+          date: descFile?.stat?.mtime, // creation time
           size: getStat(fullPath).size,
           major,
           minor,

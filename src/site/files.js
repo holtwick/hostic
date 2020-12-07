@@ -24,6 +24,18 @@ export function getStat(path) {
   }
 }
 
+// export function touchFile(path) {
+//   // did it change? fast!
+//   const {mtimeMs, size} = getStat(path)
+//   return `${path}|${mtimeMs}|${size}`
+// }
+
+export function getFingerprint(path) {
+  // did it change? fast!
+  const {mtimeMs, size} = getStat(path)
+  return `${path}|${mtimeMs}|${size}`
+}
+
 function getBasePath(basePath = null) {
   return resolve(global.basePath || process.cwd(), basePath || '.')
 }

@@ -66,6 +66,9 @@ export function getArticle({
   }
   props.date = date || null
 
+  // Slug normalization
+  slug = slug.replace(/[^\p{L}[0-9]+/gmu, '-')
+
   props.path = `${routePath}/${slug}`
   props.sourceFile = file
 
@@ -82,14 +85,14 @@ export function getArticleBody({ ctx, site }) {
   }
 }
 
-export function articles({ site, files, handleProps, routePath, body } = {}) {
+export function articles({ site, files, handleProps, routePath = '/', body } = {}) {
   let bodyFn = body
 
   routePath = routePath.endsWith('/') ? routePath.slice(0, -1) : routePath
 
   files.forEach(file => {
 
-    let { path, ...props } = getArticle({ file, site, routePath })
+    let props = getArticle({ file, site, routePath })
 
     if (handleProps) {
       if (handleProps(props) === false) {
@@ -98,7 +101,7 @@ export function articles({ site, files, handleProps, routePath, body } = {}) {
     }
 
     site.html(
-      path,
+      props.path,
       props,
       ctx => {
         getArticleBody({ ctx, site })

@@ -39,13 +39,13 @@ export function sitemap(site, opt = {}) {
                 return <url>
                   <loc>{url}</loc>
                   {priority && <priority>{(+priority).toFixed(1)}</priority>}
-                  <xhtml__link rel="alternate" hrefLang={lang} href={url}/>
+                  <xhtml__link rel="alternate" hreflang={lang} href={url}/>
                   {
                     alt && Object.entries(alt).map(([lang, href]) => {
                       if (lang === '' || lang === '*') {
                         lang = 'x-default' // https://www.sistrix.de/frag-sistrix/onpage-optimierung/wie-nutze-ich-das-x-default-hreflang-link-attribut-richtig/
                       }
-                      return <xhtml__link rel="alternate" hrefLang={lang} href={href}/>
+                      return <xhtml__link rel="alternate" hreflang={lang} href={href}/>
                     })
                   }
                 </url>

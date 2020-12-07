@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-require('source-map-support/register')
+require("./code-utils")
 
-const hostic = require('./cli-main.js')
+const hostic = require("./cli-main.js")
 hostic.main().then().catch(err => {
   process.exit(1)
 })

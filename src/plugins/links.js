@@ -23,6 +23,8 @@ export function links(opt = {}) {
         body: ctx.body,
         site: ctx.site,
         path: ctx.path,
+        targetBlank: ctx.targetBlank || true,
+        allAbsolute: ctx.allAbsolute || false
       })
 
     },

@@ -1,8 +1,8 @@
 // Copyright (c) 2020 Dirk Holtwick. All rights reserved. https://holtwick.de/copyright
 
-import { error } from './error.js'
+import { error } from "./error.js"
 
-const log = require('debug')('hostic:assert')
+const log = require("debug")("hostic:assert")
 
 export function assert(cond, ...args) {
   if (!cond) {

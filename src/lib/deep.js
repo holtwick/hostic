@@ -3,8 +3,8 @@
 
 let log = console.log
 
-const isObject = obj => obj && typeof obj === 'object'
-const isPrimitive = obj => Object(obj) !== obj
+const isObject = (obj) => obj && typeof obj === "object"
+const isPrimitive = (obj) => Object(obj) !== obj
 
 // export function deepClone(obj) {
 //   return cloneDeep(obj)
@@ -123,7 +123,6 @@ const isPrimitive = obj => Object(obj) !== obj
 // }
 
 export function deepEqual(a, b, hash = new WeakSet()) {
-
   // if both x and y are null or undefined and exactly the same
   if (a === b) {
     return true
@@ -156,7 +155,6 @@ export function deepEqual(a, b, hash = new WeakSet()) {
   }
 
   for (let p in a) {
-
     // other properties were tested using x.constructor === y.constructor
     if (!a.hasOwnProperty(p)) {
       continue
@@ -200,14 +198,13 @@ export function deepEqual(a, b, hash = new WeakSet()) {
 
 export function deepMerge(target, ...sources) {
   for (let source of sources) {
-
     if (!isObject(target)) {
       target = {}
     }
 
     if (source == null) continue
 
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       const targetValue = target[key]
       const sourceValue = source[key]
 

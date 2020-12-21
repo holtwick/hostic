@@ -1,13 +1,13 @@
-const {error} = require("./utils/error.js")
-const {setupEnv} = require("./lib/env.js")
-const {startServer} = require("./cli-serve.js")
-const {writeStatic} = require("./cli-build.js")
-const {resolve} = require("path")
-const {writeFileSync, unlinkSync} = require("fs")
-const {buildOptions} = require("./build-options.js")
-const {duration} = require("./utils/perfutil.js")
+const { error } = require("./utils/error.js")
+const { setupEnv } = require("./lib/env.js")
+const { startServer } = require("./cli-serve.js")
+const { writeStatic } = require("./cli-build.js")
+const { resolve } = require("path")
+const { writeFileSync, unlinkSync } = require("fs")
+const { buildOptions } = require("./build-options.js")
+const { duration } = require("./utils/perfutil.js")
 const esbuild = require("esbuild")
-const {evalCode} = require("./code-utils.js")
+const { evalCode } = require("./code-utils.js")
 
 const log = require("debug")("hostic:main")
 
@@ -118,12 +118,13 @@ async function cliMain() {
   log("env =", process.env.BASE_URL)
 
   // BUILD STATIC SITE
-  const STATIC = process.argv.includes("--build") || process.argv.includes("build")
+  const STATIC =
+    process.argv.includes("--build") || process.argv.includes("build")
   if (STATIC) {
     log("build a static site")
     if (!process.env.NODE_ENV) process.env.NODE_ENV = "production"
     let site = await build()
-    await writeStatic({site, time})
+    await writeStatic({ site, time })
     process.exit()
   }
 

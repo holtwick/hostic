@@ -1,4 +1,4 @@
-import { baseRender } from './base.js'
+import { baseRender } from "./base.js"
 
 export async function render(context = {}) {
   let { body } = context
@@ -8,7 +8,7 @@ export async function render(context = {}) {
     body,
   })
 
-  if (typeof body === 'object') {
+  if (typeof body === "object") {
     body = JSON.stringify(body, null, 2)
   }
 

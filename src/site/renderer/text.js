@@ -1,4 +1,4 @@
-import { baseRender } from './base.js'
+import { baseRender } from "./base.js"
 
 export async function render(context = {}) {
   let { body } = context
@@ -9,9 +9,12 @@ export async function render(context = {}) {
   })
 
   if (Array.isArray(body)) {
-    body = body.filter(l => l != null).map(l => l.toString()).join('\n')
+    body = body
+      .filter((l) => l != null)
+      .map((l) => l.toString())
+      .join("\n")
   }
-  
+
   return body
 }
 

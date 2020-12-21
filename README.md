@@ -4,7 +4,7 @@
 
 **Yet another static web site builder**
 
-There are plenty static web site generators around, but many of them *think for you* or try to make use of a specific framework on all costs. Hostic in contrary was built from the ground to use the optimal tools for the task while keeping the process pleasant. 
+There are plenty static web site generators around, but many of them _think for you_ or try to make use of a specific framework on all costs. Hostic in contrary was built from the ground to use the optimal tools for the task while keeping the process pleasant.
 
 Some features:
 
@@ -57,23 +57,23 @@ export default function (path) {
 The `path` in out example is `site` from `site/index.js`. This is required because we cannot use `__dirname` due to implementation details.
 
 ```jsx
-site.html('/sample', ctx => {
+site.html("/sample", (ctx) => {
   ctx.body = <div>Hello World</div>
 })
 ```
 
 This will create an HTML file with content `<div>Hello World</div>`. It uses JSX to describe the content. HTML files will automatically reload when the content or a referenced asset changes. `<html>`, `<head>`, `<body>` and everything es needed will be added automatically.
 
-As you noted the Context `ctx` contains data and can receive new data as well for other [Middleware](#middleware) (see below). It is important to put the result into `ctx.body`. 
+As you noted the Context `ctx` contains data and can receive new data as well for other [Middleware](#middleware) (see below). It is important to put the result into `ctx.body`.
 
 ## Middleware
 
-Hostic makes use of the *middleware programming pattern* as known from Koa.js or Express.js. Complexity and extensibility can quite elegantly be managed this way.
+Hostic makes use of the _middleware programming pattern_ as known from Koa.js or Express.js. Complexity and extensibility can quite elegantly be managed this way.
 
 A middleware is written as easy such a simple function:
 
 ```js
-async (ctx, next) => {
+;async (ctx, next) => {
   // Do something before nested middlewares are executed
   await next()
   // Do something after bested middlewares were executed
@@ -89,7 +89,7 @@ site.use(myMiddlewareFunction)
 It can also be added per page, like this:
 
 ```js
-site.html('/', template, async ctx => {
+site.html("/", template, async (ctx) => {
   ctx.body = <div>My content for the template</div>
 })
 ```
@@ -100,10 +100,10 @@ The context that is passed to Middleware is important. The most important proper
 
 ## Plugins
 
-A special kind of Middleware is the Plugin. It is basically the same, but it can have some attributes to better define its place in the process chain. You add them like this: 
+A special kind of Middleware is the Plugin. It is basically the same, but it can have some attributes to better define its place in the process chain. You add them like this:
 
-```js 
-import { plugin } from 'hostic'
+```js
+import { plugin } from "hostic"
 
 // ...
 
@@ -131,7 +131,7 @@ The `priority` tells when the plugin should be executed. The higher the value th
 jsx {
   links {
     html {
-   		// your middleware   
+   		// your middleware
     }
   }
 }
@@ -139,17 +139,17 @@ jsx {
 
 These are the priorities of plugins bundled with Hostic. The ones with stars are activated by default.
 
-| Priority | Plugin                                 | Description                                                  |
-| -------- | -------------------------------------- | ------------------------------------------------------------ |
-| 0.99     | ***jsx**                               | Provides JSX Functionality                                   |
-| 0.98     | tidy                                   | Makes HTML pretty                                            |
-| 0.90     | ...                                    | User slot for top level plugins                              |
-| 0.80     | locale, ***links**                     | Apply translations and adjust links and media to be absolute |
-| 0.70     | ...                                    | User slot for plugins that require translations              |
-| 0.60     | disqus, matomo, cookieConsent, youtube | Services                                                     |
-| 0.55     | meta                                   | SEO funcitionality                                           |
-| 0.50     | ***html**                              | Makes sure `body` and `head` are correct, otherwise adds them |
-|          | ...                                    | User slot for templates etc. Default priority is `0`         |
+| Priority | Plugin                                 | Description                                                   |
+| -------- | -------------------------------------- | ------------------------------------------------------------- |
+| 0.99     | **\*jsx**                              | Provides JSX Functionality                                    |
+| 0.98     | tidy                                   | Makes HTML pretty                                             |
+| 0.90     | ...                                    | User slot for top level plugins                               |
+| 0.80     | locale, **\*links**                    | Apply translations and adjust links and media to be absolute  |
+| 0.70     | ...                                    | User slot for plugins that require translations               |
+| 0.60     | disqus, matomo, cookieConsent, youtube | Services                                                      |
+| 0.55     | meta                                   | SEO funcitionality                                            |
+| 0.50     | **\*html**                             | Makes sure `body` and `head` are correct, otherwise adds them |
+|          | ...                                    | User slot for templates etc. Default priority is `0`          |
 
 More details:
 
@@ -171,7 +171,7 @@ Privacy conforming integration of Disqus service.
 
 ### locale
 
-Translate:  
+Translate:
 
 - Text content that starts with underscore like `<div>_Translate this</div>`
 - Remove elements with not matching languages in `data-lang` attributes, like `<div data-lang="en">Translate this</div>`
@@ -216,24 +216,24 @@ Lorem ipsum
 
 (more details to be added)
 
-## Lazy Loading and Multiple Passes 
+## Lazy Loading and Multiple Passes
 
-Site creation and serving contents are two separate steps. In the first step paths and their contents descriptions are registered to a site manager. In the second step the content is dynamically generated on demand. 
+Site creation and serving contents are two separate steps. In the first step paths and their contents descriptions are registered to a site manager. In the second step the content is dynamically generated on demand.
 
 A benefit from this separation is, that the content registration can have multipe passes, for example you can first register all pages and then in a second pass modify them. As an example in a multi language website it is possible to first register all pages and then connect the alternate pages. An example:
 
 ```js
-site.routes.values().forEach(page => {  
-  if (page.path.startsWith('/en/')) {
+site.routes.values().forEach((page) => {
+  if (page.path.startsWith("/en/")) {
     page.meta.alt = {
-      'de': '/de/' + page.path.substr(4),
-      '*': '/' + page.path.substr(4), // Redirection based on 
+      de: "/de/" + page.path.substr(4),
+      "*": "/" + page.path.substr(4), // Redirection based on
     }
   }
 })
 ```
 
-Another step is done for assets. If a HTML page has references to images, CSS, JS etc. it can add these references on the fly. That increases speed and offers more flexibility. The build process for the static pages is therefore run twice, because in the first step new references to assets might have been added. 
+Another step is done for assets. If a HTML page has references to images, CSS, JS etc. it can add these references on the fly. That increases speed and offers more flexibility. The build process for the static pages is therefore run twice, because in the first step new references to assets might have been added.
 
 ## Apache
 
@@ -250,8 +250,8 @@ The top level of configuration are environment variables. You can set them in yo
 
 Available settings are:
 
-- `BASE_URL=https://holtwick.de` - The base URL that is required to calculate absolute URLs e.g. for canonical URL or alternative languages meta data, but also for sitemaps and the like. For the preview server this will be automatically set to the appropriate `localhost` address. This is especially useful if you are building for different targets like `stage` and `production`. 
-- `PORT=8080` - The preview servers port number 
+- `BASE_URL=https://holtwick.de` - The base URL that is required to calculate absolute URLs e.g. for canonical URL or alternative languages meta data, but also for sitemaps and the like. For the preview server this will be automatically set to the appropriate `localhost` address. This is especially useful if you are building for different targets like `stage` and `production`.
+- `PORT=8080` - The preview servers port number
 
 ## Performance
 
@@ -275,10 +275,10 @@ Read about it in [my blog](https://holtwick.de/blog/birth-of-hostic?ref=github&k
 I don't know... there are plenty of good tools around. But I stumbled into creating this one and then got fascinated by [esbuild](https://github.com/evanw/esbuild), [vite](https://github.com/vitejs/vite), the own virtual DOM and other details that where interesting to implement. For non geeky people it might be easier to start with something from the shelf like [11ty](https://www.11ty.dev/).
 
 ## License
- 
+
 Hostic is free and can be modified and forked. But the conditions of the EUPL (European Union Public License 1.2) need to be respected, which are similar to ones of the GPL. In particular modifications need to be free as well and made available to the public.
 
-For different licensing options please contact [license@holtwick.de](mailto:license@holtwick.de).  
+For different licensing options please contact [license@holtwick.de](mailto:license@holtwick.de).
 
 Get a quick overview of the license at [Choose an open source license](https://choosealicense.com/licenses/eupl-1.2/). This license is available in the [languages of the European Community](https://eupl.eu/).
 

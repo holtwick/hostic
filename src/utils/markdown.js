@@ -1,24 +1,30 @@
-import { parseHTML } from 'hostic-dom'
-import { parse as parseYAML } from 'yaml'
-import hljs from 'highlight.js'
-import marked from 'marked'
+import { parseHTML } from "hostic-dom"
+import { parse as parseYAML } from "yaml"
+import hljs from "highlight.js"
+import marked from "marked"
 
-const log = require('debug')('hostic:markdown')
+const log = require("debug")("hostic:markdown")
 
-function buildOutlineBS4(headers, level = 1, opt = {
-  maxLevel: 2,
-  class: {
-    '1': 'nav flex-column',
-    '2': 'nav flex-column',
-    '3': 'nav flex-column',
-    '4': 'nav flex-column',
-    '5': 'nav flex-column',
-  },
-}) {
-  let list = ''
+function buildOutlineBS4(
+  headers,
+  level = 1,
+  opt = {
+    maxLevel: 2,
+    class: {
+      1: "nav flex-column",
+      2: "nav flex-column",
+      3: "nav flex-column",
+      4: "nav flex-column",
+      5: "nav flex-column",
+    },
+  }
+) {
+  let list = ""
   while (headers && headers.length > 0) {
     if (!list) {
-      list += `<nav class="${opt.class[level.toString()]} nav-level-${level}">\n`
+      list += `<nav class="${
+        opt.class[level.toString()]
+      } nav-level-${level}">\n`
     }
     let h = headers[0]
     if (h) {
@@ -31,7 +37,7 @@ function buildOutlineBS4(headers, level = 1, opt = {
         }
         // list += `</li>`
       } else if (h.level < level) {
-        list += '</nav>\n'
+        list += "</nav>\n"
         return list
       } else {
         if (level < opt.maxLevel) {
@@ -48,15 +54,17 @@ function buildOutlineBS4(headers, level = 1, opt = {
 export function parseMarkdownStructure(content) {
   let props = {}
 
-  props.markdown = content.toString().replace(/^---([\s\S]*?)---/gi, function (_, propString) {
-    Object.assign(props, parseYAML(propString.trim()))
-    return ''
-  })
+  props.markdown = content
+    .toString()
+    .replace(/^---([\s\S]*?)---/gi, function (_, propString) {
+      Object.assign(props, parseYAML(propString.trim()))
+      return ""
+    })
 
   props.headline = props.title
   let c = props.markdown.trim()
-  if (c.startsWith('# ')) {
-    let headline = c.split('\n')[0].substr(2)
+  if (c.startsWith("# ")) {
+    let headline = c.split("\n")[0].substr(2)
     props.headline = headline
     if (!props.title) {
       props.title = headline
@@ -67,12 +75,7 @@ export function parseMarkdownStructure(content) {
 }
 
 export function parseMarkdown(content, opt = {}) {
-
-  let {
-    outline = false,
-    stripHeadline = true,
-    highlightCode = true,
-  } = opt
+  let { outline = false, stripHeadline = true, highlightCode = true } = opt
 
   let props = parseMarkdownStructure(content)
 
@@ -90,10 +93,10 @@ export function parseMarkdown(content, opt = {}) {
     let anchor = null // text.toLowerCase().replace(/[^\w]+/g, '-')
     text = text.replace(/{#([^}]+)}/, (m, a) => {
       anchor = a
-      return ''
+      return ""
     })
     if (stripHeadline && !strippedTitle && level === 1) {
-      return ''
+      return ""
     }
     // let title = unescapeHTML(text)
     // if (!strippedTitle && title === props.title) {
@@ -105,11 +108,11 @@ export function parseMarkdown(content, opt = {}) {
     //   // return ''
     // }
     if (outline) {
-      anchor = anchor || 'outline-' + ++ctr
+      anchor = anchor || "outline-" + ++ctr
       headers.push({
         level: +level,
         anchor,
-        text: text.replace(/<.*?>/g, '').trim(),
+        text: text.replace(/<.*?>/g, "").trim(),
       })
     }
     if (props.inc) {
@@ -139,7 +142,7 @@ export function parseMarkdown(content, opt = {}) {
     sanitize: props.sanitize == null ? false : props.sanitize,
     smartLists: true,
     smartypants: false,
-    langPrefix: 'lang-',
+    langPrefix: "lang-",
     renderer,
   })
 
@@ -150,7 +153,8 @@ export function parseMarkdown(content, opt = {}) {
     props.bodyOutline = parseHTML(props.outline)
   }
 
-  if (typeof props.tags === 'string') props.tags = props.tags.split(',').map(s => s.trim())
+  if (typeof props.tags === "string")
+    props.tags = props.tags.split(",").map((s) => s.trim())
 
   if (!props.tags) props.tags = []
 

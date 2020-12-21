@@ -5,11 +5,11 @@ export async function render(context = {}) {
   //   mime.gues
   // }
 
-  if (typeof body === 'string') {
+  if (typeof body === "string") {
     return body
   }
 
-  if (typeof body === 'function') {
+  if (typeof body === "function") {
     body = body(context)
   }
 
@@ -17,7 +17,8 @@ export async function render(context = {}) {
     body = await body
   }
 
-  if (body && body.render) { // like VDOM
+  if (body && body.render) {
+    // like VDOM
     body = body.render()
   }
 

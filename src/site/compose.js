@@ -1,18 +1,17 @@
 // Cannot make it any better, therefore taken from https://github.com/koajs/compose
 
-const log = require('debug')('hostic:compose')
+const log = require("debug")("hostic:compose")
 
 export function compose(middleware) {
-
   if (!Array.isArray(middleware)) {
-    log('Not an array', middleware)
-    throw new TypeError('Middleware stack must be an array!')
+    log("Not an array", middleware)
+    throw new TypeError("Middleware stack must be an array!")
   }
 
   for (const fn of middleware) {
-    if (typeof fn !== 'function') {
-      log('Not a function', fn,  'in', middleware)
-      throw new TypeError('Middleware must be composed of functions!')
+    if (typeof fn !== "function") {
+      log("Not a function", fn, "in", middleware)
+      throw new TypeError("Middleware must be composed of functions!")
     }
   }
 
@@ -23,7 +22,7 @@ export function compose(middleware) {
 
     function dispatch(i) {
       if (i <= index) {
-        return Promise.reject(new Error('next() called multiple times'))
+        return Promise.reject(new Error("next() called multiple times"))
       }
       index = i
       let fn = middleware[i]

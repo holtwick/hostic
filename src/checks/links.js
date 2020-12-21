@@ -1,7 +1,7 @@
-import { warn } from '../utils/error.js'
-import { error } from '../utils/error.js'
-import { TYPE_HTML } from '../site/types.js'
-import { parseHTML } from 'hostic-dom'
+import { warn } from "../utils/error.js"
+import { error } from "../utils/error.js"
+import { TYPE_HTML } from "../site/types.js"
+import { parseHTML } from "hostic-dom"
 
 export async function checkLinks(site) {
   const routes = site.routes
@@ -13,13 +13,15 @@ export async function checkLinks(site) {
       if (type === TYPE_HTML) {
         let { content } = await routes.render(path, { site })
         let body = parseHTML(content)
-        body.querySelectorAll('a[href]').forEach(el => {
-          if (el.getAttribute('data-ignore-check') == null) {
-            let href = el.getAttribute('href')
-            if (href.startsWith('/') && !href.startsWith('/goto/')) {
-              href = href.replace(/[#?].*$/, '')
+        body.querySelectorAll("a[href]").forEach((el) => {
+          if (el.getAttribute("data-ignore-check") == null) {
+            let href = el.getAttribute("href")
+            if (href.startsWith("/") && !href.startsWith("/goto/")) {
+              href = href.replace(/[#?].*$/, "")
               if (!site.routes.has(href)) {
-                warn(`Invalid link to ${href} "${el.textContent}" (found in ${path})`)
+                warn(
+                  `Invalid link to ${href} "${el.textContent}" (found in ${path})`
+                )
                 issues += 1
                 // incrementErrorCount()
               }
@@ -33,7 +35,7 @@ export async function checkLinks(site) {
     }
   }
   return {
-    name: 'Check internal links',
+    name: "Check internal links",
     success: issues === 0,
     issues,
   }

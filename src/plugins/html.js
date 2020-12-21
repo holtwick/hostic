@@ -1,18 +1,17 @@
-import { vdom, createHTMLDocument } from 'hostic-dom'
-import { TYPE_HTML } from '../site/types.js'
+import { vdom, createHTMLDocument } from "hostic-dom"
+import { TYPE_HTML } from "../site/types.js"
 
-const log = require('debug')('hostic:mw:html')
+const log = require("debug")("hostic:mw:html")
 
 // const defaultOpt = {}
 
 export function html(opt = {}) {
-
   return {
-    name: 'html',
+    name: "html",
     priority: 0.5,
     type: TYPE_HTML,
     middleware: async (ctx, next) => {
-      log('start', ctx, next)
+      log("start", ctx, next)
 
       // let opt = Object.assign({}, defaultOpt, opt, ctx['tidy'])
 
@@ -24,12 +23,12 @@ export function html(opt = {}) {
       ctx.body = vdom(ctx.body)
       if (ctx.body.ownerDocument == null) {
         const document = createHTMLDocument()
-        let htmlBody = ctx.body.querySelector('body')
+        let htmlBody = ctx.body.querySelector("body")
         if (htmlBody == null) {
           document.body.appendChild(ctx.body)
         } else {
           document.body.replaceWith(htmlBody)
-          let htmlHead = ctx.body.querySelector('head')
+          let htmlHead = ctx.body.querySelector("head")
           if (htmlHead) {
             document.head.replaceWith(htmlHead)
           }
@@ -38,8 +37,8 @@ export function html(opt = {}) {
       }
 
       // Move head stuff to right location
-      ctx.body.querySelectorAll('meta, link, style, title').forEach(e => {
-        if (!['HEAD', 'SVG'].includes(e?.parentNode?.tagName)) {
+      ctx.body.querySelectorAll("meta, link, style, title").forEach((e) => {
+        if (!["HEAD", "SVG"].includes(e?.parentNode?.tagName)) {
           ctx.body.head.appendChild(e)
         }
       })
@@ -49,8 +48,7 @@ export function html(opt = {}) {
         ctx.body.title = ctx.title
       }
 
-      log('end')
+      log("end")
     },
   }
-
 }

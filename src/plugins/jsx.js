@@ -1,18 +1,17 @@
-import { vdom, document, hFactory } from 'hostic-dom'
-import { TYPE_HTML } from '../site/types.js'
-import { TYPE_XML } from '../site/types.js'
-import { assert } from '../utils/assert.js'
+import { vdom, document, hFactory } from "hostic-dom"
+import { TYPE_HTML } from "../site/types.js"
+import { TYPE_XML } from "../site/types.js"
+import { assert } from "../utils/assert.js"
 
-const log = require('debug')('hostic:mw:jsx')
+const log = require("debug")("hostic:mw:jsx")
 
 export function jsx(opt = {}) {
-
   return {
-    name: 'jsx',
+    name: "jsx",
     priority: 0.99,
     types: [TYPE_HTML, TYPE_XML],
     middleware: async (ctx, next) => {
-      log('start', ctx)
+      log("start", ctx)
 
       ctx.document = document
       ctx.body = vdom(ctx.body)
@@ -36,8 +35,6 @@ export function jsx(opt = {}) {
       //   site: ctx.site,
       //   path: ctx.path,
       // })
-
     },
   }
-
 }

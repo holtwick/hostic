@@ -1,50 +1,40 @@
 // Support for Matomo integration, respecting do not track
 
-import { assert } from '../../utils/assert.js'
-import { parseHTML } from 'hostic-dom'
-import { TYPE_HTML } from '../../site/types.js'
+import { assert } from "../../utils/assert.js"
+import { parseHTML } from "hostic-dom"
+import { TYPE_HTML } from "../../site/types.js"
 
 export function matomoCampaignURL(url, opt = {}) {
-  const {
-    name = 'blog',
-    kw = '',
-    source = '',
-  } = opt
-  assert(url, '[plugin.matomo] url required')
+  const { name = "blog", kw = "", source = "" } = opt
+  assert(url, "[plugin.matomo] url required")
   let href = new URL(url)
-  name && href.searchParams.set('pk_campaign', name)
-  kw && href.searchParams.set('pk_kwd', kw)
-  source && href.searchParams.set('pk_source', source)
+  name && href.searchParams.set("pk_campaign", name)
+  kw && href.searchParams.set("pk_kwd", kw)
+  source && href.searchParams.set("pk_source", source)
   return href.toString()
 }
 
 export function matomoPixelImage(opt) {
-  const {
-    matomo,
-    url,
-    action,
-    name = 'blog',
-    kw = '',
-  } = opt
-  assert(matomo.id, '[plugin.matomo] matomo.id required')
-  assert(matomo.url, '[plugin.matomo] matomo.url required')
-  assert(url, '[plugin.matomo] url required')
-  let href = new URL(matomo.url + 'matomo.php')
-  href.searchParams.set('idsite', matomo.id.toString())
-  href.searchParams.set('rec', '1')
-  href.searchParams.set('bots', '1')
-  href.searchParams.set('url', url)
-  action && href.searchParams.set('action_name', action)
-  name && href.searchParams.set('_rcn', name) // Campaign name
-  kw && href.searchParams.set('_rck', kw) // Campaign keyword
-  return <img src={href.toString()} style="border:0;" alt=""/>
+  const { matomo, url, action, name = "blog", kw = "" } = opt
+  assert(matomo.id, "[plugin.matomo] matomo.id required")
+  assert(matomo.url, "[plugin.matomo] matomo.url required")
+  assert(url, "[plugin.matomo] url required")
+  let href = new URL(matomo.url + "matomo.php")
+  href.searchParams.set("idsite", matomo.id.toString())
+  href.searchParams.set("rec", "1")
+  href.searchParams.set("bots", "1")
+  href.searchParams.set("url", url)
+  action && href.searchParams.set("action_name", action)
+  name && href.searchParams.set("_rcn", name) // Campaign name
+  kw && href.searchParams.set("_rck", kw) // Campaign keyword
+  return <img src={href.toString()} style="border:0;" alt="" />
 }
 
 export function matomoAnalytics(opt) {
   let { url, id } = opt || {}
 
-  assert(url, '[plugin.matomo] url required')
-  assert(id, '[plugin.matomo] id required')
+  assert(url, "[plugin.matomo] url required")
+  assert(id, "[plugin.matomo] id required")
 
   return `<script>
 var disableStr = 'ga-disable-${id}';
@@ -77,7 +67,7 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
 
 export function matomo(pluginOpt = {}) {
   return {
-    name: 'matomo',
+    name: "matomo",
     priority: 0.6,
     type: TYPE_HTML,
     middleware: async (ctx, next) => {
@@ -85,6 +75,6 @@ export function matomo(pluginOpt = {}) {
       let { url, id } = Object.assign({}, pluginOpt, ctx.matomo || {})
       let body = ctx.body.ownerDocument.body
       body.appendChild(parseHTML(matomoAnalytics({ url, id })))
-    }
+    },
   }
 }

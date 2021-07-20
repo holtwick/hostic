@@ -1,7 +1,7 @@
 import { warn } from "../utils/error.js"
 import { error } from "../utils/error.js"
 import { TYPE_HTML } from "../site/types.js"
-import { parseHTML } from "hostic-dom"
+import { parseHTML } from "zeed-dom"
 
 export async function checkLinks(site) {
   const routes = site.routes

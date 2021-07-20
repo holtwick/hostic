@@ -1,4 +1,4 @@
-import { vdom, createHTMLDocument } from "hostic-dom"
+import { vdom, createHTMLDocument } from "zeed-dom"
 import { TYPE_HTML } from "../site/types.js"
 
 const log = require("debug")("hostic:mw:html")

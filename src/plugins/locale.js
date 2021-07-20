@@ -1,4 +1,4 @@
-import { VNode } from "hostic-dom"
+import { VNode } from "zeed-dom"
 import { TYPE_HTML } from "../site/types.js"
 
 const log = require("debug")("hostic:plugin:locale")

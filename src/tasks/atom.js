@@ -1,5 +1,5 @@
 import { markdown } from "../utils/markdown.js"
-import { CDATA, tidyDOM } from "hostic-dom"
+import { CDATA, tidyDOM } from "zeed-dom"
 import { absolute } from "../site/links/absolute.js"
 import { assets } from "../site/links/assets.js"
 

@@ -25,8 +25,8 @@ import { status } from "./status.js"
 import { error } from "../utils/error.js"
 import { warn } from "../utils/error.js"
 import { js } from "../plugins/ecmascript.js"
-import { vdom } from "hostic-dom"
-import { removeBodyContainer } from "hostic-dom"
+import { vdom } from "zeed-dom"
+import { removeBodyContainer } from "zeed-dom"
 import { checkLinks } from "../checks/links.js"
 
 const { resolve } = require("path")

@@ -9,7 +9,7 @@ There are plenty static web site generators around, but many of them _think for 
 Some features:
 
 - **Supports JSX** but is not related to any framework like React, Vue or Svelte
-- Implements a light way DOM abstraction ([hostic-dom](https://github.com/holtwick/hostic-dom)) to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
+- Implements a light way DOM abstraction ([zeed-dom](https://github.com/holtwick/zeed-dom)) to easily allow **post process** tasks like calculating image sizes, optimize for SEO, etc.
 - **Real time preview** with self reloading pages. Experiment with different designs or contents.
 - **Any file type** can be created like XML sitemaps of RSS feeds, robots.txt or whatever you need
 - Great **Markdown support**: Write your articles using Markdown and refer to assets used in it. Hostic puts it all together. Works great with [OnePile.app](https://onepile.app?ref=hostic&kw=github).
@@ -96,7 +96,7 @@ site.html("/", template, async (ctx) => {
 
 ## Context
 
-The context that is passed to Middleware is important. The most important property of it is `body`. It holds the content of the page. For HTML and XML usually in form of a [virtual DOM](https://github.com/holtwick/hostic-dom). But it can also be used to pass properties to other Middlewares, like `lang` for language or `title` for the page title.
+The context that is passed to Middleware is important. The most important property of it is `body`. It holds the content of the page. For HTML and XML usually in form of a [virtual DOM](https://github.com/holtwick/zeed-dom). But it can also be used to pass properties to other Middlewares, like `lang` for language or `title` for the page title.
 
 ## Plugins
 
@@ -185,11 +185,11 @@ Translations can be provided as simple objects like:
 }
 ```
 
-## Virtual DOM ([hostic-dom](https://github.com/holtwick/hostic-dom))
+## Virtual DOM ([zeed-dom](https://github.com/holtwick/zeed-dom))
 
-This [DOM abstraction](https://github.com/holtwick/hostic-dom) for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
+This [DOM abstraction](https://github.com/holtwick/zeed-dom) for HTML and XML content is not designed for speed like in UI frameworks. Its goal is to help doing post process tasks on the content with familiar API. You can e.g. use CSS selectors to retrieve elements like `root.querySelectorAll('img[src]')` and then manipulate like `element.setAttribute('src', src + '?ref=example')`. Some special additions help to work on nodes like `document.handle('h1,h2,h3', e => e.classList.add('header'))`.
 
-Learn more at [github.com/holtwick/hostic-dom](https://github.com/holtwick/hostic-dom).
+Learn more at [github.com/holtwick/zeed-dom](https://github.com/holtwick/zeed-dom).
 
 ## Static Files
 

@@ -1,4 +1,4 @@
-import { tidyDOM, vdom } from "hostic-dom"
+import { tidyDOM, vdom } from "zeed-dom"
 import { TYPE_HTML } from "../site/types.js"
 
 const log = require("debug")("hostic:mw:tidy")

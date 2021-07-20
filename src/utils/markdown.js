@@ -1,4 +1,4 @@
-import { parseHTML } from "hostic-dom"
+import { parseHTML } from "zeed-dom"
 import { parse as parseYAML } from "yaml"
 import hljs from "highlight.js"
 import marked from "marked"

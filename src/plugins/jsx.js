@@ -1,4 +1,4 @@
-import { vdom, document, hFactory } from "hostic-dom"
+import { vdom, document, hFactory } from "zeed-dom"
 import { TYPE_HTML } from "../site/types.js"
 import { TYPE_XML } from "../site/types.js"
 import { assert } from "../utils/assert.js"

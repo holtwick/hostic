@@ -1,4 +1,4 @@
-import { xml } from "hostic-dom"
+import { xml } from "zeed-dom"
 
 const log = require("debug")("hostic:render:html")
 

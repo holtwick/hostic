@@ -1,7 +1,7 @@
 // Support for Matomo integration, respecting do not track
 
 import { assert } from "../../utils/assert.js"
-import { parseHTML } from "hostic-dom"
+import { parseHTML } from "zeed-dom"
 import { TYPE_HTML } from "../../site/types.js"
 
 export function matomoCampaignURL(url, opt = {}) {

@@ -38,9 +38,10 @@ export function releases({
 } = {}) {
   let entries = files
     .map(({ path, basePath, fullPath }) => {
-      const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(
-        path
-      )
+      const r =
+        /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(
+          path
+        )
       // console.log('r', r)
       const prefix = r[1]
       const fullVersion = r[2]

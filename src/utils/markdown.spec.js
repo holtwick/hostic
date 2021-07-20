@@ -25,7 +25,7 @@ Lorem **ipsum**
     expect(r.title).toEqual("One World")
     expect(r.headline).toEqual("This is a world")
     expect(r.html).toBe(
-      '<pre><code class="lang-js">alert(1)\nalert(2)</code></pre>\n<p>Lorem <strong>ipsum</strong></p>\n'
+      '<pre><code class="lang-js">alert(1)\nalert(2)\n</code></pre>\n<p>Lorem <strong>ipsum</strong></p>\n'
     )
   })
 })

@@ -1,12 +1,12 @@
 // Copyright (c) 2020 Dirk Holtwick. All rights reserved. https://holtwick.de/copyright
 // Adopted from https://github.com/jczaplew/csv-express MIT
 
-import { ServerResponse } from 'http'
+import { ServerResponse } from "http"
 
 const res = ServerResponse.prototype
 
 // Configurable settings
-export const separator = ','
+export const separator = ","
 export const preventCast = false
 export const ignoreNullOrUndefined = true
 
@@ -21,7 +21,7 @@ function filterFloat(value) {
 
 function escape(field) {
   if (ignoreNullOrUndefined && field === undefined) {
-    return ''
+    return ""
   }
   if (preventCast) {
     return '="' + String(field).replace(/"/g, '""') + '"'
@@ -33,19 +33,21 @@ function escape(field) {
 }
 
 res.csv = function (data, headerRow, headers, status) {
-  let body = ''
+  let body = ""
   let statusCodeSet = true
 
-  this.charset = this.charset || 'utf-8'
-  this.header('Content-Type', 'text/csv')
+  this.charset = this.charset || "utf-8"
+  this.header("Content-Type", "text/csv")
 
   // Set custom headers
   if (headers && headers instanceof Object) {
     // Use res.header() instead of res.set() to maintain backward compatibility with Express 2
     // Change to res.set() in next major version so that iteration is not required
-    Object.keys(headers).forEach(function (header) {
-      this.header(header, headers[header])
-    }.bind(this))
+    Object.keys(headers).forEach(
+      function (header) {
+        this.header(header, headers[header])
+      }.bind(this)
+    )
   }
 
   // Set response status code
@@ -60,12 +62,12 @@ res.csv = function (data, headerRow, headers, status) {
 
   // Append the header row to the response if requested
   if (headerRow) {
-    body = headerRow.join(separator) + '\r\n'
+    body = headerRow.join(separator) + "\r\n"
   }
 
   // Convert the data to a CSV-like structure
   for (let i = 0; i < data.length; i++) {
-    body += data[i].map(escape).join(separator) + '\r\n'
+    body += data[i].map(escape).join(separator) + "\r\n"
   }
 
   if (!statusCodeSet) {

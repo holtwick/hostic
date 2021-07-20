@@ -1,28 +1,23 @@
-import { tidyDOM, vdom } from 'hostic-dom'
-import { TYPE_HTML } from '../site/types.js'
+import { tidyDOM, vdom } from "zeed-dom"
+import { TYPE_HTML } from "../site/types.js"
 
-const log = require('debug')('hostic:mw:tidy')
+const log = require("debug")("hostic:mw:tidy")
 
 const defaultOpt = {}
 
 export function tidy(options = {}) {
-
   return {
-    name: 'tidy',
+    name: "tidy",
     priority: 0.98,
     type: TYPE_HTML,
     middleware: async (ctx, next) => {
-      log('start')
+      log("start")
 
       await next()
 
-      let opt = Object.assign({},
-        defaultOpt,
-        options,
-        ctx['tidy'] || {})
+      let opt = Object.assign({}, defaultOpt, options, ctx["tidy"] || {})
 
       if (ctx.type === TYPE_HTML) {
-
         // Make sure we have a VDOM
         ctx.body = vdom(ctx.body)
 
@@ -30,8 +25,7 @@ export function tidy(options = {}) {
         tidyDOM(ctx.body, opt)
       }
 
-      log('end')
+      log("end")
     },
   }
-
 }

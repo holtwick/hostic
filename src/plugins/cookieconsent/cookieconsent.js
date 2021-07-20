@@ -1,12 +1,11 @@
-import css from './cookieconsent.css'
-import { TYPE_HTML } from '../../site/types.js'
+import css from "./cookieconsent.css"
+import { TYPE_HTML } from "../../site/types.js"
 
-const log = require('debug')('hostic:plugin:cookieconsent')
+const log = require("debug")("hostic:plugin:cookieconsent")
 
 export function cookieConsent(pluginOpt = {}) {
-
   return {
-    name: 'cookieconsent',
+    name: "cookieconsent",
     priority: 0.6,
     type: TYPE_HTML,
     middleware: async (ctx, next) => {
@@ -15,23 +14,34 @@ export function cookieConsent(pluginOpt = {}) {
       await next()
 
       const { lang } = ctx
-      const privacyURL = ctx.privacyURL ?? opt.privacyURL ?? (lang ? `/${lang}/privacy` : '/privacy')
+      const privacyURL =
+        ctx.privacyURL ??
+        opt.privacyURL ??
+        (lang ? `/${lang}/privacy` : "/privacy")
 
       let body = ctx.body.ownerDocument.body
       body.appendChild(
         <fragment>
           <div id="cookie-consent" className="cookie-consent d-none">
             <div className="cookie-consent-body">
-              <en>This website uses cookies to ensure you get the best experience on our website.</en>
-              <de>Diese Website nutzt Cookies, um bestmögliche Funktionalität bieten zu können.</de>
-              {' '}
+              <en>
+                This website uses cookies to ensure you get the best experience
+                on our website.
+              </en>
+              <de>
+                Diese Website nutzt Cookies, um bestmögliche Funktionalität
+                bieten zu können.
+              </de>{" "}
               <a href={privacyURL} data-ignore-check>
                 <en>Learn&nbsp;more</en>
                 <de>Mehr&nbsp;Informationen</de>
               </a>
             </div>
             <div className="cookie-consent-buttons">
-              <button onClick="giveCookieConsent()" className="btn btn-outline-info">
+              <button
+                onClick="giveCookieConsent()"
+                className="btn btn-outline-info"
+              >
                 <en>Got&nbsp;it</en>
                 <de>Verstanden</de>
               </button>
@@ -57,7 +67,7 @@ export function cookieConsent(pluginOpt = {}) {
             }
           })
         `}</script>
-        </fragment>,
+        </fragment>
       )
     },
   }

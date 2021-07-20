@@ -1,6 +1,6 @@
-import { parseDate } from '../utils/dateutils.js'
-import { getStat } from '../site/files.js'
-import { markdown } from '../utils/markdown.js'
+import { parseDate } from "../utils/dateutils.js"
+import { getStat } from "../site/files.js"
+import { markdown } from "../utils/markdown.js"
 
 // class Article {
 //
@@ -29,31 +29,25 @@ import { markdown } from '../utils/markdown.js'
 //
 // }
 
-export function getArticle({
-                             file,
-                             site,
-                             routePath = '/',
-                             body = false,
-                           }) {
+export function getArticle({ file, site, routePath = "/", body = false }) {
   let props = {
-    sourceType: 'html',
+    sourceType: "html",
   }
 
-  if (['.md', '.mdown', '.markdown'].includes(file.ext)) {
-
+  if ([".md", ".mdown", ".markdown"].includes(file.ext)) {
     if (body) {
       props = site.readMarkdown(file) || {}
     } else {
       props = site.readMarkdownProperties(file) || {}
     }
-    props.sourceType = 'markdown'
+    props.sourceType = "markdown"
   }
 
   let slug = props.slug || file.name
-  slug = slug === 'index' ? '' : slug
+  slug = slug === "index" ? "" : slug
 
   // Hidden
-  if (file.name.startsWith('-')) {
+  if (file.name.startsWith("-")) {
     props.hidden = true
     slug = slug.substr(1)
   }
@@ -67,7 +61,7 @@ export function getArticle({
   props.date = date || null
 
   // Slug normalization
-  slug = slug.replace(/[^\p{L}[0-9]+/gmu, '-')
+  slug = slug.replace(/[^\p{L}[0-9]+/gmu, "-")
 
   props.path = `${routePath}/${slug}`
   props.sourceFile = file
@@ -76,7 +70,7 @@ export function getArticle({
 }
 
 export function getArticleBody({ ctx, site }) {
-  if (ctx.sourceType === 'markdown') {
+  if (ctx.sourceType === "markdown") {
     ctx.markdown = site.readMarkdown(ctx.sourceFile, { path: ctx.path })
     ctx.body = ctx.markdown.body
   } else {
@@ -85,13 +79,18 @@ export function getArticleBody({ ctx, site }) {
   }
 }
 
-export function articles({ site, files, handleProps, routePath = '/', body } = {}) {
+export function articles({
+  site,
+  files,
+  handleProps,
+  routePath = "/",
+  body,
+} = {}) {
   let bodyFn = body
 
-  routePath = routePath.endsWith('/') ? routePath.slice(0, -1) : routePath
+  routePath = routePath.endsWith("/") ? routePath.slice(0, -1) : routePath
 
-  files.forEach(file => {
-
+  files.forEach((file) => {
     let props = getArticle({ file, site, routePath })
 
     if (handleProps) {
@@ -100,13 +99,9 @@ export function articles({ site, files, handleProps, routePath = '/', body } = {
       }
     }
 
-    site.html(
-      props.path,
-      props,
-      ctx => {
-        getArticleBody({ ctx, site })
-        ctx.body = bodyFn(ctx) || ctx.body
-      })
+    site.html(props.path, props, (ctx) => {
+      getArticleBody({ ctx, site })
+      ctx.body = bodyFn(ctx) || ctx.body
+    })
   })
 }
-

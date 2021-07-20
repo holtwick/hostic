@@ -1,6 +1,6 @@
 // From https://stackoverflow.com/a/56111105/140927
 const vm = require("vm")
-const {resolve} = require("path")
+const { resolve } = require("path")
 
 // This establishes a mapping between sourcePaths and the actual source.
 const sourcePathToSource = Object.create(null)
@@ -35,7 +35,11 @@ sourceMapSupport.install({
   // },
 })
 
-function evalCode(code, sourceMap, jsPath = resolve(__dirname, "out/index.js")) {
+function evalCode(
+  code,
+  sourceMap,
+  jsPath = resolve(__dirname, "out/index.js")
+) {
   sourcePathToSource[jsPath] = code
   if (sourceMap) {
     sourcePathToSource[jsPath + ".map"] = sourceMap

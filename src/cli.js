@@ -3,6 +3,9 @@
 require("./code-utils")
 
 const hostic = require("./cli-main.js")
-hostic.main().then().catch(err => {
-  process.exit(1)
-})
+hostic
+  .main()
+  .then()
+  .catch((err) => {
+    process.exit(1)
+  })

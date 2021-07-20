@@ -1,18 +1,19 @@
-import { matomoAnalytics, matomoCampaignURL } from './matomo.js'
+import { matomoAnalytics, matomoCampaignURL } from "./matomo.js"
 
-describe('pugin.matomo', () => {
-
+describe("pugin.matomo", () => {
   const matomo = {
-    url: 'https://stats.holtwick.de/matomo/',
+    url: "https://stats.holtwick.de/matomo/",
     id: 2,
   }
 
-  it('should update a campaign url', () => {
-    let url = matomoCampaignURL('https://www.receipts-app.com/de/help?me#now', {
-      name: 'campaign1',
-      kw: 'keyword1',
+  it("should update a campaign url", () => {
+    let url = matomoCampaignURL("https://www.receipts-app.com/de/help?me#now", {
+      name: "campaign1",
+      kw: "keyword1",
     })
-    expect(url).toEqual('https://www.receipts-app.com/de/help?me=&pk_campaign=campaign1&pk_kwd=keyword1#now')
+    expect(url).toEqual(
+      "https://www.receipts-app.com/de/help?me=&pk_campaign=campaign1&pk_kwd=keyword1#now"
+    )
   })
 
   // it('should create a count pixel', () => {
@@ -23,7 +24,7 @@ describe('pugin.matomo', () => {
   //   expect(html).toEqual('<img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1&amp;bots=1&amp;url=%2Frss-opened&amp;_rcn=blog" alt="" style="border:0;">')
   // })
 
-  it('should add to page', () => {
+  it("should add to page", () => {
     const sample = matomoAnalytics(matomo)
     expect(sample).toBe(`<script>
 var disableStr = 'ga-disable-2';
@@ -49,18 +50,19 @@ if (!((window.navigator && window.navigator['doNotTrack'] == 1) || (document.coo
 </script><noscript><img src="https://stats.holtwick.de/matomo/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt=""></noscript>`)
   })
 
-  it('should change url', () => {
-    const matomoCampaign = 'a'
-    const matomoKeyword = 'b'
+  it("should change url", () => {
+    const matomoCampaign = "a"
+    const matomoKeyword = "b"
 
     const handleURL = (url) => {
       url = new URL(url)
-      matomoCampaign && url.searchParams.append('pk_campaign', matomoCampaign)
-      matomoKeyword && url.searchParams.append('pk_kwd', matomoKeyword)
+      matomoCampaign && url.searchParams.append("pk_campaign", matomoCampaign)
+      matomoKeyword && url.searchParams.append("pk_kwd", matomoKeyword)
       return url.toString()
     }
 
-    expect(handleURL('https://holtwick.de/imprint')).toBe('https://holtwick.de/imprint?pk_campaign=a&pk_kwd=b')
+    expect(handleURL("https://holtwick.de/imprint")).toBe(
+      "https://holtwick.de/imprint?pk_campaign=a&pk_kwd=b"
+    )
   })
-
 })

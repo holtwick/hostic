@@ -1,15 +1,16 @@
-const { statSync, copyFileSync, readFileSync, writeFileSync } = require('fs')
-const { join, dirname } = require('path')
-const { mkdir, walkSync } = require('./fileutil')
+const { statSync, copyFileSync, readFileSync, writeFileSync } = require("fs")
+const { join, dirname } = require("path")
+const { mkdir, walkSync } = require("./fileutil")
 
-const log = require('debug')('hostic:foldermanager')
-
+const log = require("debug")("hostic:foldermanager")
 
 function isPattern(pattern) {
-  return pattern != null && (
-    pattern instanceof RegExp ||
-    typeof pattern === 'string' ||
-    Array.isArray(pattern))
+  return (
+    pattern != null &&
+    (pattern instanceof RegExp ||
+      typeof pattern === "string" ||
+      Array.isArray(pattern))
+  )
 }
 
 function pathMatchesPatterns(path, patterns) {
@@ -18,15 +19,14 @@ function pathMatchesPatterns(path, patterns) {
       patterns = [patterns]
     }
     for (let pattern of patterns) {
-      if (typeof pattern === 'string') {
-
+      if (typeof pattern === "string") {
         // Strip leading /
-        if (pattern.indexOf('/') === 0) {
+        if (pattern.indexOf("/") === 0) {
           pattern = pattern.substring(1)
         }
 
         // Match folder ?
-        if (pattern[pattern.length - 1] === '/') {
+        if (pattern[pattern.length - 1] === "/") {
           if (path.indexOf(pattern) === 0) {
             return true
           }
@@ -47,29 +47,31 @@ function pathMatchesPatterns(path, patterns) {
 }
 
 function filterByPatterns(paths, patterns, exclude) {
-  return (paths || [])
-    .filter(file => {
-      if (pathMatchesPatterns(file, patterns || [])) {
-        if (isPattern(exclude)) {
-          return !pathMatchesPatterns(file, exclude || [])
-        }
-        return true
+  return (paths || []).filter((file) => {
+    if (pathMatchesPatterns(file, patterns || [])) {
+      if (isPattern(exclude)) {
+        return !pathMatchesPatterns(file, exclude || [])
       }
-      return false
-    })
+      return true
+    }
+    return false
+  })
 }
 
 class FolderManager {
-
   // opt: Object
   // basePath: string
   // log: Function
 
-  constructor(srcPath, basePath, opt = {
-    excludePatterns: null,
-    includePatterns: null,
-    baseURL: '',
-  }) {
+  constructor(
+    srcPath,
+    basePath,
+    opt = {
+      excludePatterns: null,
+      includePatterns: null,
+      baseURL: "",
+    }
+  ) {
     // log('Site', srcPath, basePath, opt)
 
     this.opt = opt
@@ -96,33 +98,34 @@ class FolderManager {
     let urlPaths = filterByPatterns(
       this.files, // walkSync(this.basePath),
       pattern,
-      exclude)
+      exclude
+    )
     urlPaths.sort()
     return urlPaths
   }
 
   pathsRX(pattern) {
-    return this.files.map(f => {
-      pattern.lastIndex = 0
-      return f.match(pattern)
-    }).filter(m => m != null)
+    return this.files
+      .map((f) => {
+        pattern.lastIndex = 0
+        return f.match(pattern)
+      })
+      .filter((m) => m != null)
   }
 
   exists(urlPath) {
     try {
       let p = this.path(urlPath)
       return !!statSync(p)
-    } catch (err) {
-
-    }
+    } catch (err) {}
     return false
   }
 
   // URLs
 
   url(path) {
-    if (path[0] !== '/') {
-      path = '/' + path
+    if (path[0] !== "/") {
+      path = "/" + path
     }
     return path
   }
@@ -174,27 +177,27 @@ class FolderManager {
 
   read(urlPath) {
     try {
-      if (urlPath[0] === '/') {
+      if (urlPath[0] === "/") {
         urlPath = urlPath.substring(1)
       }
       let inPath = join(this.srcPath, urlPath)
       // log('read', urlPath, inPath)
       return readFileSync(inPath)
     } catch (ex) {
-      console.error('Failed to .read file:', urlPath)
+      console.error("Failed to .read file:", urlPath)
     }
     return null
   }
 
   write(urlPath, content) {
-    if (urlPath[0] === '/') {
+    if (urlPath[0] === "/") {
       urlPath = urlPath.substring(1)
     }
     let outPath = join(this.dstPath, urlPath)
     mkdir(dirname(outPath))
     console.debug(`write ... ${outPath}`)
 
-    if (typeof content !== 'string') {
+    if (typeof content !== "string") {
       content = content.toString()
     }
     writeFileSync(outPath, content, {
@@ -205,7 +208,6 @@ class FolderManager {
   stat(path) {
     return statSync(this.path(path))
   }
-
 }
 
 module.exports = {

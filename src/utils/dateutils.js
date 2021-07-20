@@ -3,13 +3,12 @@ export function parseDate(...dateCandidates) {
     if (dateCandidate instanceof Date) {
       return dateCandidate
     }
-    if (typeof dateCandidate === 'string') {
+    if (typeof dateCandidate === "string") {
       let date = null
-      if (dateCandidate.includes(':')) {
+      if (dateCandidate.includes(":")) {
         try {
           date = new Date(dateCandidate)
-        } catch (err) {
-        }
+        } catch (err) {}
       }
       if (!(date instanceof Date)) {
         let m = /(\d\d\d\d)-(\d\d)-(\d\d)/.exec(dateCandidate)
@@ -27,5 +26,9 @@ export function parseDate(...dateCandidates) {
 
 export function stringifyDate(date, { lang }) {
   // https://elijahmanor.com/format-js-numbers
-  return date?.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })
+  return date?.toLocaleDateString(lang, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 }

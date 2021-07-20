@@ -1,27 +1,25 @@
-const { normalizePath } = require('./utils/pathutil.js')
-const chokidar = require('chokidar')
-const mime = require('mime-types')
-const express = require('express')
-const http = require('http')
-const socketio = require('socket.io')
-const { BUILD_TIMEOUT_MS } = require('./config.js')
-const { duration } = require('./utils/perfutil.js')
-const { red, magenta, bold, green, blue, gray, underline } = require('chalk')
+const { normalizePath } = require("./utils/pathutil.js")
+const chokidar = require("chokidar")
+const mime = require("mime-types")
+const express = require("express")
+const http = require("http")
+const socketio = require("socket.io")
+const { BUILD_TIMEOUT_MS } = require("./config.js")
+const { duration } = require("./utils/perfutil.js")
+const { red, magenta, bold, green, blue, gray, underline } = require("chalk")
 
-const log = require('debug')('hostic:server')
+const log = require("debug")("hostic:server")
 
 function print(...parts) {
-  process.stdout.write(parts.join(''))
+  process.stdout.write(parts.join(""))
 }
 
-module.exports.startServer = function (
-  {
-    sitePath = 'site',
-    port = 8080,
-    build,
-    performUserSetup,
-  } = {}) {
-
+module.exports.startServer = function ({
+  sitePath = "site",
+  port = 8080,
+  build,
+  performUserSetup,
+} = {}) {
   process.env.BASE_URL = `http://localhost:${port}`
 
   // SOCKET.IO
@@ -37,16 +35,16 @@ module.exports.startServer = function (
       socket = io
       serverInstanceID = Math.random()
     }
-    log('Emit reload browser')
-    socket.emit('reload', {
+    log("Emit reload browser")
+    socket.emit("reload", {
       counter: 0,
       serverInstanceID,
     })
   }
 
-  io.on('connection', function (socket) {
+  io.on("connection", function (socket) {
     const sid = socket.id
-    log('connection socket id:', sid)
+    log("connection socket id:", sid)
     browserReload(socket)
   })
 
@@ -54,13 +52,13 @@ module.exports.startServer = function (
 
   let site
 
-  const forceBuild = ['js', 'jsx', 'css']
+  const forceBuild = ["js", "jsx", "css"]
 
   let reloadTimeout
 
   function reload(path) {
     if (reloadTimeout) clearTimeout(reloadTimeout)
-    reloadTimeout = setTimeout(_ => {
+    reloadTimeout = setTimeout((_) => {
       reloadTimeout = null
 
       print(blue.bold(`\nContent changes. Performing reload. `))
@@ -72,13 +70,13 @@ module.exports.startServer = function (
         force = forceBuild.includes(extension)
       }
       if (force) {
-        build().then(r => {
+        build().then((r) => {
           site = r
           browserReload()
           print(gray(`(${time()})\n`))
         })
       } else {
-        performUserSetup().then(r => {
+        performUserSetup().then((r) => {
           site = r
           browserReload()
           print(gray(`(${time()})\n`))
@@ -94,7 +92,9 @@ module.exports.startServer = function (
   // SERVER - EXPRESS
 
   function injectReload(html) {
-    return html.replace('</body>', `<script src="/socket.io/socket.io.js"></script>
+    return html.replace(
+      "</body>",
+      `<script src="/socket.io/socket.io.js"></script>
     <script>
     const socket = io('ws://localhost:8080')
     let serverInstanceID = ${serverInstanceID}
@@ -108,7 +108,8 @@ module.exports.startServer = function (
         console.log(' ... already up to date')
       }  
     })
-    </script></body>`)
+    </script></body>`
+    )
   }
 
   function errorPage(err) {
@@ -125,7 +126,7 @@ module.exports.startServer = function (
     return injectReload(html)
   }
 
-  app.use('/', (req, res) => {
+  app.use("/", (req, res) => {
     let path = decodeURIComponent(req.path)
     // console.info(`${new Date().toISOString()} - ${req.method} ${req.path}`)
 
@@ -135,7 +136,7 @@ module.exports.startServer = function (
     let time = duration()
 
     if (!site) {
-      log('Site not available')
+      log("Site not available")
       return
     }
 
@@ -144,8 +145,8 @@ module.exports.startServer = function (
     let routeExists = site.routes.has(path)
     if (!routeExists) {
       if (site.config.redirectLang) {
-        if (!(path.startsWith('/en/') || path.startsWith('/de/'))) {
-          let newPath = '/en' + path
+        if (!(path.startsWith("/en/") || path.startsWith("/de/"))) {
+          let newPath = "/en" + path
           if (site.routes.has(normalizePath(newPath))) {
             print(magenta(`\nRedirect ${path} to ${newPath}\n`))
             res.redirect(newPath)
@@ -153,7 +154,7 @@ module.exports.startServer = function (
           }
         }
       }
-      if (path === '/service-worker.js') {
+      if (path === "/service-worker.js") {
         print(magenta(` (ignored)`))
       } else if (site.config.errorPage) {
         path = site.config.errorPage
@@ -161,61 +162,69 @@ module.exports.startServer = function (
       }
     }
 
-    site.routes.render(path, { site }).then(content => {
-      if (content != null) {
-        if (content.error) {
-          res.send(errorPage(content.error))
-        } else {
-          let html = content.content
-          let type = content.type
-          if (type) {
-            if (type === 'text/html') {
-              html = injectReload(html)
-            }
+    site.routes
+      .render(path, { site })
+      .then((content) => {
+        if (content != null) {
+          if (content.error) {
+            res.send(errorPage(content.error))
           } else {
-            type = mime.lookup(path)
+            let html = content.content
+            let type = content.type
+            if (type) {
+              if (type === "text/html") {
+                html = injectReload(html)
+              }
+            } else {
+              type = mime.lookup(path)
+            }
+            res.type(type)
+            res.send(html)
+            // print(`(${type}; ${html.length} bytes; ${time()})`)
+            print(gray(` (${time()})`))
           }
-          res.type(type)
-          res.send(html)
-          // print(`(${type}; ${html.length} bytes; ${time()})`)
-          print(gray(` (${time()})`))
+        } else {
+          res.send(errorPage("File not found"))
         }
-      } else {
-        res.send(errorPage('File not found'))
-      }
-    }).catch(e => {
-      console.error(`Error for ${path}: ${e.toString()}`)
-      res.send(errorPage(`Error for ${path}: ${e.toString()}`))
-    }).finally(_ => print('\n'))
+      })
+      .catch((e) => {
+        console.error(`Error for ${path}: ${e.toString()}`)
+        res.send(errorPage(`Error for ${path}: ${e.toString()}`))
+      })
+      .finally((_) => print("\n"))
   })
 
   // WATCHER - CHOKIDAR
 
-  log('Observe', sitePath, __dirname)
+  log("Observe", sitePath, __dirname)
 
   const watcher = chokidar.watch(
     [
       sitePath,
       __dirname, // This is the folder of main.js
       // 'src',
-    ], {
+    ],
+    {
       ignored: /(^|[\/\\])\../, // ignore dotfiles
       persistent: true,
       ignoreInitial: true,
-    })
+    }
+  )
 
-  watcher
-    .on('add', reload)
-    .on('change', reload)
-    .on('unlink', reload)
+  watcher.on("add", reload).on("change", reload).on("unlink", reload)
 
   // SERVER
 
-  server.listen({
-    port,
-  }, _ => {
-    let { address: host, port } = server.address()
-    if (host === '::') host = 'localhost'
-    console.info(magenta.bold(`Hostic preview on`, underline(`http://${host}:${port}/`)))
-  })
+  server.listen(
+    {
+      port,
+    },
+    (_) => {
+      let { address: host, port } = server.address()
+      if (host === "::") host = "localhost"
+      console.info(
+        magenta.bold(`Hostic preview on`, underline(`http://${host}:${port}/`))
+      )
+    }
+  )
 }

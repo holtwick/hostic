@@ -1,4 +1,4 @@
-const {red, yellow} = require("chalk")
+const { red, yellow } = require("chalk")
 
 global.errorStats = {}
 global.errorCallback = null
@@ -14,7 +14,7 @@ clearErrorStats()
 //
 
 function getErrorStats() {
-  return {...global.errorStats}
+  return { ...global.errorStats }
 }
 
 function incrementErrorCount() {
@@ -26,7 +26,7 @@ function setErrorCallback(fn = null) {
 }
 
 function prepareMessage(args, level) {
-  const message = (args.map(a => a.toString()).join(" "))
+  const message = args.map((a) => a.toString()).join(" ")
   const now = new Date()
   let info = {
     message,
@@ -46,7 +46,7 @@ function error(...args) {
   // console.error(red('\nError: ' + msg.message))
   console.error(red("\n" + msg.message))
   incrementErrorCount()
-  let err = args.find(a => a instanceof Error)
+  let err = args.find((a) => a instanceof Error)
   if (err) {
     console.error(err)
     // } else {
@@ -59,7 +59,7 @@ function warn(...args) {
   // console.error(yellow('\nWarning: ' + msg.message))
   console.warn(yellow("\n" + msg.message))
   ++global.errorStats.warnings
-  let err = args.find(a => a instanceof Error)
+  let err = args.find((a) => a instanceof Error)
   if (err) {
     console.warn(err)
   }
@@ -73,4 +73,3 @@ module.exports = {
   warn,
   setErrorCallback,
 }
-

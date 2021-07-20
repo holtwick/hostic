@@ -22,3 +22,4 @@ pnpm-debug.log*
 *.sw?
 src/.deprecated
 src/out
+pnpm-lock.yaml

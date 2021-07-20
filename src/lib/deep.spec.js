@@ -1,7 +1,6 @@
-import { deepMerge } from './deep.js'
+import { deepMerge } from "./deep.js"
 
-describe('Deep', () => {
-
+describe("Deep", () => {
   // it('should clone simple', () => {
   //   let a = {
   //     hello: {
@@ -19,12 +18,12 @@ describe('Deep', () => {
   //   expect(deepEqual(a, b)).toBeTruthy()
   // })
 
-  it('should simple checks', () => {
-    let value = new String('Hello')
+  it("should simple checks", () => {
+    let value = new String("Hello")
     // expect(typeof value === 'string').toBe(true)
-    expect(typeof value === 'object').toBe(true)
-    expect(value.valueOf()).toBe('Hello')
-    expect(new String(value).valueOf()).toBe('Hello')
+    expect(typeof value === "object").toBe(true)
+    expect(value.valueOf()).toBe("Hello")
+    expect(new String(value).valueOf()).toBe("Hello")
   })
 
   // it('should clone complex', () => {
@@ -71,7 +70,7 @@ describe('Deep', () => {
   //   expect(deepClone({ c: 1, a: { d: 0, c: 1, e: { a: 0, 1: 4 } } })).toEqual({ c: 1, a: { d: 0, c: 1, e: { a: 0, 1: 4 } } })
   // })
 
-  it('should merge deep', () => {
+  it("should merge deep", () => {
     let a = {
       hello: {
         world: 42,
@@ -84,7 +83,7 @@ describe('Deep', () => {
     let b = {
       hello: {
         world: -1,
-        sea: 'none',
+        sea: "none",
       },
       other: {
         fish: 2,
@@ -101,7 +100,7 @@ describe('Deep', () => {
     expect(d).toEqual({
       hello: {
         world: -1,
-        sea: 'none',
+        sea: "none",
       },
       other: {
         fish: 8,
@@ -145,5 +144,4 @@ describe('Deep', () => {
   //   // expect(a.one.sample === b.one.sample).toBe(true)
   //   // expect(a.one.sample.a === b.one.sample.a).toBe(true)
   // })
-
 })

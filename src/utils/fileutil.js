@@ -1,9 +1,15 @@
 // (C)opyright Dirk Holtwick, 2016-09-02 <dirk.holtwick@gmail.com>
 
-const { readdirSync, statSync, unlinkSync, rmdirSync, mkdirSync } = require('fs')
-const { join, sep } = require('path')
+const {
+  readdirSync,
+  statSync,
+  unlinkSync,
+  rmdirSync,
+  mkdirSync,
+} = require("fs")
+const { join, sep } = require("path")
 
-function walkSync(rootFolder, subFolder = '', ignoreHidden = true) {
+function walkSync(rootFolder, subFolder = "", ignoreHidden = true) {
   let resultPaths = []
   let paths = readdirSync(join(rootFolder, subFolder))
   if (paths != null && paths.length > 0) {
@@ -29,7 +35,7 @@ function rmdir(dir) {
     for (let i = 0; i < list.length; i++) {
       let filename = join(dir, list[i])
       let stat = statSync(filename)
-      if (filename === '.' || filename === '..') {
+      if (filename === "." || filename === "..") {
         // pass these files
       } else if (stat.isDirectory()) {
         // rmdir recursively
@@ -40,15 +46,13 @@ function rmdir(dir) {
       }
     }
     rmdirSync(dir)
-  } catch (ex) {
-
-  }
+  } catch (ex) {}
 }
 
-function mkdir(p, root = '') {
+function mkdir(p, root = "") {
   let dirs = p.split(sep)
   let dir = dirs.shift()
-  root = (root || '') + dir + sep
+  root = (root || "") + dir + sep
   try {
     mkdirSync(root, 0o755)
   } catch (ex) {

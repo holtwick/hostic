@@ -24,21 +24,24 @@
 
  */
 
-import { getFile } from '../site/files.js'
-import { getArticle } from './articles.js'
-import { resolve } from 'url'
-import { normalizePath } from '../utils/pathutil.js'
-import { getStat } from '../site/files.js'
+import { getFile } from "../site/files.js"
+import { getArticle } from "./articles.js"
+import { resolve } from "url"
+import { normalizePath } from "../utils/pathutil.js"
+import { getStat } from "../site/files.js"
 
 export function releases({
-                           site,
-                           files,
-                           requiresMarkdown = false,
-                           downloadFolder = 'download',
-                         } = {}) {
+  site,
+  files,
+  requiresMarkdown = false,
+  downloadFolder = "download",
+} = {}) {
   let entries = files
     .map(({ path, basePath, fullPath }) => {
-      const r = /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(path)
+      const r =
+        /(^.+[^\d.])(((\d+)\.(\d+)(\.(\d+))?(\.(\d+))?(b(\d+))?)(-(\d+))?)\.[^.]+$/.exec(
+          path
+        )
       // console.log('r', r)
       const prefix = r[1]
       const fullVersion = r[2]
@@ -83,8 +86,9 @@ export function releases({
         }
       }
     })
-    .filter(o => !!o) // exclude empty ones
-    .sort((a, b) => { // by build and version numbers
+    .filter((o) => !!o) // exclude empty ones
+    .sort((a, b) => {
+      // by build and version numbers
       let r
       r = a.build - b.build
       if (r === 0) {

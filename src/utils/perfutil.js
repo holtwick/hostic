@@ -1,4 +1,4 @@
-const { performance } = require('perf_hooks')
+const { performance } = require("perf_hooks")
 
 module.exports.duration = function () {
   const t0 = performance.now()
@@ -12,11 +12,11 @@ module.exports.duration = function () {
 
     // https://elijahmanor.com/format-js-numbers
     // https://tc39.es/proposal-unified-intl-numberformat/section6/locales-currencies-tz_proposed_out.html#sec-issanctionedsimpleunitidentifier
-    return duration.toLocaleString('en-US', {
-      style: 'unit',
-      unit: 'millisecond',
-      notation: 'compact',
-      compactDisplay: 'long',
+    return duration.toLocaleString("en-US", {
+      style: "unit",
+      unit: "millisecond",
+      notation: "compact",
+      compactDisplay: "long",
     })
   }
 }

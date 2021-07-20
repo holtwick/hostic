@@ -1,8 +1,8 @@
 // Inspired by https://github.com/aelbore/esbuild-jest#readme
 
-const pkg = require('../package.json')
-const esbuild = require('esbuild')
-const { buildOptions } = require('./build-options.js')
+const pkg = require("../package.json")
+const esbuild = require("esbuild")
+const { buildOptions } = require("./build-options.js")
 
 const external = [
   ...Object.keys(pkg.dependencies ?? {}),
@@ -11,7 +11,6 @@ const external = [
   ...buildOptions.external,
 ]
 module.exports = {
-
   // https://jestjs.io/docs/en/troubleshooting#caching-issues
   getCacheKey() {
     return Math.random().toString()
@@ -24,6 +23,6 @@ module.exports = {
       write: false,
       entryPoints: [filename],
     })
-    return new TextDecoder('utf-8').decode(result.outputFiles[0].contents)
+    return new TextDecoder("utf-8").decode(result.outputFiles[0].contents)
   },
 }

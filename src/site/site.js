@@ -1,68 +1,68 @@
-import { Routes } from './routes.js'
-import { FolderManager } from '../utils/foldermanager.js'
-import { UUID } from '../lib/uuid.js'
-import { parsePath } from '../utils/pathutil.js'
-import { getBasePath } from '../utils/pathutil.js'
-import { markdown } from '../utils/markdown.js'
-import { parseMarkdownStructure } from '../utils/markdown.js'
-import { TYPE_HTML } from './types.js'
-import { TYPE_XML } from './types.js'
-import { TYPE_TEXT } from './types.js'
-import { TYPE_JSON } from './types.js'
-import { TYPE_YAML } from './types.js'
-import { STATUS_PAGE_PATH } from '../config.js'
-import { compose } from './compose.js'
-import { context } from '../plugins/context.js'
-import { file } from '../plugins/file.js'
-import { css } from '../plugins/postcss.js'
-import { html } from '../plugins/html.js'
-import { jsx } from '../plugins/jsx.js'
-import { links } from '../plugins/links.js'
-import { getContent } from './files.js'
-import { files } from './files.js'
-import { assets } from './links/assets.js'
-import { status } from './status.js'
-import { error } from '../utils/error.js'
-import { warn } from '../utils/error.js'
-import { js } from '../plugins/ecmascript.js'
-import { vdom } from 'hostic-dom'
-import { removeBodyContainer } from 'hostic-dom'
-import { checkLinks } from '../checks/links.js'
+import { Routes } from "./routes.js"
+import { FolderManager } from "../utils/foldermanager.js"
+import { UUID } from "../lib/uuid.js"
+import { parsePath } from "../utils/pathutil.js"
+import { getBasePath } from "../utils/pathutil.js"
+import { markdown } from "../utils/markdown.js"
+import { parseMarkdownStructure } from "../utils/markdown.js"
+import { TYPE_HTML } from "./types.js"
+import { TYPE_XML } from "./types.js"
+import { TYPE_TEXT } from "./types.js"
+import { TYPE_JSON } from "./types.js"
+import { TYPE_YAML } from "./types.js"
+import { STATUS_PAGE_PATH } from "../config.js"
+import { compose } from "./compose.js"
+import { context } from "../plugins/context.js"
+import { file } from "../plugins/file.js"
+import { css } from "../plugins/postcss.js"
+import { html } from "../plugins/html.js"
+import { jsx } from "../plugins/jsx.js"
+import { links } from "../plugins/links.js"
+import { getContent } from "./files.js"
+import { files } from "./files.js"
+import { assets } from "./links/assets.js"
+import { status } from "./status.js"
+import { error } from "../utils/error.js"
+import { warn } from "../utils/error.js"
+import { js } from "../plugins/ecmascript.js"
+import { vdom } from "zeed-dom"
+import { removeBodyContainer } from "zeed-dom"
+import { checkLinks } from "../checks/links.js"
 
-const { resolve } = require('path')
+const { resolve } = require("path")
 
-const inspect = Symbol.for('nodejs.util.inspect.custom')
+const inspect = Symbol.for("nodejs.util.inspect.custom")
 
-const log = require('debug')('hostic:site')
+const log = require("debug")("hostic:site")
 
 export class Site {
-
   constructor({ path, plugins, baseURL, ...routeOpts } = {}) {
     this.uid = UUID()
-    log('Site', path, this.uid)
+    log("Site", path, this.uid)
     this.data = {}
 
     this.config = {
       forceSSL: true,
       noWWW: true,
       redirectLang: true,
-      errorPage: '404',
+      errorPage: "404",
       checkInternalLinks: true,
     }
 
-    this.checks = [
-      checkLinks,
-    ]
+    this.checks = [checkLinks]
 
     if (baseURL == null) {
       baseURL = process.env.BASE_URL
     }
 
     if (!baseURL) {
-      warn('You should provide a BASE_URL for appropriate meta data, sitemaps and others.\n The easiest way is to add a .env file.')
+      warn(
+        "You should provide a BASE_URL for appropriate meta data, sitemaps and others.\n The easiest way is to add a .env file."
+      )
     }
 
-    this.baseURL = (baseURL?.endsWith('/') ? baseURL?.slice(0, -1) : baseURL) || '/'
+    this.baseURL =
+      (baseURL?.endsWith("/") ? baseURL?.slice(0, -1) : baseURL) || "/"
 
     this.sourcePath = path
 
@@ -79,11 +79,11 @@ export class Site {
     this.html(STATUS_PAGE_PATH, status)
   }
 
-  sources(condition = _ => true) {
-    return (this.folderManager.files
-      .map(path => {
-        if (!path.startsWith('/')) {
-          path = '/' + path
+  sources(condition = (_) => true) {
+    return this.folderManager.files
+      .map((path) => {
+        if (!path.startsWith("/")) {
+          path = "/" + path
         }
         if (path === STATUS_PAGE_PATH) {
           return null
@@ -98,7 +98,7 @@ export class Site {
         }
         return result
       })
-      .filter(p => p != null))
+      .filter((p) => p != null)
   }
 
   read(path) {
@@ -111,7 +111,7 @@ export class Site {
 
   readFile(file) {
     let content, sourceFolder
-    if (typeof file === 'string') {
+    if (typeof file === "string") {
       content = this.read(file)
       sourceFolder = getBasePath(file)
     } else {
@@ -125,7 +125,7 @@ export class Site {
   }
 
   readMarkdown(file, { path } = {}) {
-    log('readMarkdown', file)
+    log("readMarkdown", file)
     let { content, sourceFolder } = this.readFile(file)
     let { body, ...info } = markdown(content)
     assets({
@@ -151,7 +151,7 @@ export class Site {
 
   readMarkdownProperties(path) {
     let data, sourcePath
-    if (typeof path === 'string') {
+    if (typeof path === "string") {
       data = this.read(path)
       sourcePath = getBasePath(path)
     } else {
@@ -174,17 +174,16 @@ export class Site {
         path,
       })
     } else {
-      let fullPath = resolve(global.basePath || process.cwd(), '.', source)
-      ff = [{
-        path,
-        fullPath,
-      }]
+      let fullPath = resolve(global.basePath || process.cwd(), ".", source)
+      ff = [
+        {
+          path,
+          fullPath,
+        },
+      ]
     }
     for (let { path, fullPath } of ff) {
-      let next = compose([
-        context({ path }),
-        file(fullPath),
-      ])
+      let next = compose([context({ path }), file(fullPath)])
       this.routes.set(path, {
         path,
         next,
@@ -200,17 +199,16 @@ export class Site {
     //     path,
     //   })
     // } else {
-    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
-    let ff = [{
-      path,
-      fullPath,
-    }]
+    let fullPath = resolve(global.basePath || process.cwd(), ".", source)
+    let ff = [
+      {
+        path,
+        fullPath,
+      },
+    ]
     // }
     for (let { path, fullPath } of ff) {
-      let next = compose([
-        context({ path }),
-        css(fullPath),
-      ])
+      let next = compose([context({ path }), css(fullPath)])
       this.routes.set(path, {
         path,
         next,
@@ -226,17 +224,16 @@ export class Site {
     //     path,
     //   })
     // } else {
-    let fullPath = resolve(global.basePath || process.cwd(), '.', source)
-    let ff = [{
-      path,
-      fullPath,
-    }]
+    let fullPath = resolve(global.basePath || process.cwd(), ".", source)
+    let ff = [
+      {
+        path,
+        fullPath,
+      },
+    ]
     // }
     for (let { path, fullPath } of ff) {
-      let next = compose([
-        context({ path }),
-        js(fullPath),
-      ])
+      let next = compose([context({ path }), js(fullPath)])
       this.routes.set(path, {
         path,
         next,
@@ -245,27 +242,25 @@ export class Site {
   }
 
   registeredMiddlewares = {
-    [TYPE_HTML]: [
-      html(),
-      jsx(),
-      links(),
-    ],
-    [TYPE_XML]: [
-      jsx(),
-    ],
+    [TYPE_HTML]: [html(), jsx(), links()],
+    [TYPE_XML]: [jsx()],
   }
 
   use(middleware, opt = {}) {
     let type
     let {} = opt
     if (opt.type && middleware?.type && opt.type !== middleware?.type) {
-      error(`Using middleware of type ${middleware?.type} for ${opt.type} is not allowed: ${middleware?.name || middleware}`)
+      error(
+        `Using middleware of type ${middleware?.type} for ${
+          opt.type
+        } is not allowed: ${middleware?.name || middleware}`
+      )
     }
     type = opt.type || middleware?.type || TYPE_HTML
     if (this.registeredMiddlewares[type] == null) {
       this.registeredMiddlewares[type] = []
     }
-    if (typeof middleware === 'function') {
+    if (typeof middleware === "function") {
       middleware = {
         middleware,
       }
@@ -274,16 +269,18 @@ export class Site {
   }
 
   _splitMiddlewares(ctx, mixedMiddlewares) {
-    let top = [], bottom = [], middlewares = []
+    let top = [],
+      bottom = [],
+      middlewares = []
     for (let mw of mixedMiddlewares) {
-      if (typeof mw === 'function') {
+      if (typeof mw === "function") {
         mw = { middleware: mw }
       }
       if (mw.middleware == null) {
         ctx = Object.assign(ctx, mw)
       } else {
         middlewares.push(mw.middleware)
-        if (+(mw.priority) > 0) {
+        if (+mw.priority > 0) {
           top.push(mw)
         } else {
           bottom.push(mw.middleware)
@@ -291,8 +288,11 @@ export class Site {
       }
     }
     top.sort((a, b) => b.priority - a.priority)
-    log('MW order', top.map(mw => mw?.name || mw?.middleware?.constructor?.name).join(', '))
-    top = top.map(mw => mw.middleware)
+    log(
+      "MW order",
+      top.map((mw) => mw?.name || mw?.middleware?.constructor?.name).join(", ")
+    )
+    top = top.map((mw) => mw.middleware)
     return { top, bottom, ctx, middlewares }
   }
 
@@ -312,7 +312,7 @@ export class Site {
       ...pageMW.middlewares,
     ]
 
-    log('middlewares', middlewares)
+    log("middlewares", middlewares)
     return {
       ctx,
       next: compose(middlewares),
@@ -320,8 +320,8 @@ export class Site {
   }
 
   _page(path, type, typeMiddlewares = [], pageMiddlewares = []) {
-    if (!path.startsWith('/')) {
-      path = '/' + path
+    if (!path.startsWith("/")) {
+      path = "/" + path
     }
     let initialContext = {
       path,
@@ -331,7 +331,7 @@ export class Site {
       initialContext,
       this.registeredMiddlewares[type],
       typeMiddlewares,
-      pageMiddlewares,
+      pageMiddlewares
     )
     this.routes.set(path, {
       ...ctx,
@@ -342,48 +342,23 @@ export class Site {
   }
 
   html(path, ...middlewares) {
-    this._page(
-      path,
-      TYPE_HTML,
-      [],
-      middlewares,
-    )
+    this._page(path, TYPE_HTML, [], middlewares)
   }
 
   xml(path, ...middlewares) {
-    this._page(
-      path,
-      TYPE_XML,
-      [],
-      middlewares,
-    )
+    this._page(path, TYPE_XML, [], middlewares)
   }
 
   text(path, ...middlewares) {
-    this._page(
-      path,
-      TYPE_TEXT,
-      [],
-      middlewares,
-    )
+    this._page(path, TYPE_TEXT, [], middlewares)
   }
 
   json(path, ...middlewares) {
-    this._page(
-      path,
-      TYPE_JSON,
-      [],
-      middlewares,
-    )
+    this._page(path, TYPE_JSON, [], middlewares)
   }
 
   yaml(path, ...middlewares) {
-    this._page(
-      path,
-      TYPE_YAML,
-      [],
-      middlewares,
-    )
+    this._page(path, TYPE_YAML, [], middlewares)
   }
 
   [inspect]() {

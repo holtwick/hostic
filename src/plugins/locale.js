@@ -38,19 +38,17 @@ export function locale(pluginOpt = {}) {
         const excludeAttrs = ["target"]
 
         // <input placeholder="_Translate me"
-        let textNodes = ctx.body.flatten({
-          condition(node) {
-            if (node.nodeType === VNode.TEXT_NODE) {
-              return true
-            } else if (node.nodeType === VNode.ELEMENT_NODE) {
-              let attr = node.attributes
-              for (let [name, value] of Object.entries(attr)) {
-                if (!excludeAttrs.includes(name) && value?.startsWith("_")) {
-                  node.setAttribute(name, translateString(value.substr(1)))
-                }
+        let textNodes = ctx.body.flattenNodes().filter((node) => {
+          if (node.nodeType === VNode.TEXT_NODE) {
+            return true
+          } else if (node.nodeType === VNode.ELEMENT_NODE) {
+            let attr = node.attributes
+            for (let [name, value] of Object.entries(attr)) {
+              if (!excludeAttrs.includes(name) && value?.startsWith("_")) {
+                node.setAttribute(name, translateString(value.substr(1)))
               }
             }
-          },
+          }
         })
 
         // <div>_Translate me</div>

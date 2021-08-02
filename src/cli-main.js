@@ -13,7 +13,7 @@ const log = require("debug")("hostic:main")
 
 const sitePath = resolve("site")
 
-let service
+// let service
 let code
 let sourcemap
 let mod
@@ -29,10 +29,10 @@ async function performUserSetup() {
 async function build() {
   log("Build...")
 
-  if (!service) {
-    service = await esbuild.startService()
-    log("ESBuild service", service)
-  }
+  // if (!service) {
+  //   service = await esbuild.startService()
+  //   log("ESBuild service", service)
+  // }
 
   const sourceMapExternal = false
 
@@ -50,7 +50,7 @@ async function build() {
 
   log("Build options", options)
 
-  let result = await service.build(options)
+  let result = await esbuild.build(options)
   for (let out of result.outputFiles) {
     console.info("output", out.path)
     if (out.path.endsWith(".js.map")) {

@@ -44,7 +44,11 @@ export function locale(pluginOpt = {}) {
           } else if (node.nodeType === VNode.ELEMENT_NODE) {
             let attr = node.attributes
             for (let [name, value] of Object.entries(attr)) {
-              if (!excludeAttrs.includes(name) && value?.startsWith("_")) {
+              if (
+                !excludeAttrs.includes(name) &&
+                typeof value === "string" &&
+                value?.startsWith("_")
+              ) {
                 node.setAttribute(name, translateString(value.substr(1)))
               }
             }
@@ -53,10 +57,12 @@ export function locale(pluginOpt = {}) {
 
         // <div>_Translate me</div>
         textNodes.forEach((node) => {
-          let text = node?.nodeValue?.trim() || ""
-          if (text.startsWith("_")) {
-            // This is VTextNode specific!
-            node._text = translateString(text.substr(1))
+          if (typeof node?.nodeValue === "string") {
+            let text = node?.nodeValue?.trim() || ""
+            if (text.startsWith("_")) {
+              // This is VTextNode specific!
+              node._text = translateString(text.substr(1))
+            }
           }
         })
 

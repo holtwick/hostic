@@ -1,6 +1,6 @@
 {
   "name": "hostic",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "description": "Yet another static web site generator",
   "main": "src/index.js",
   "scripts": {
@@ -58,7 +58,7 @@
     "source-map-support": "^0.5.19",
     "uuid": "^8.3.2",
     "yaml": "^1.10.2",
-    "zeed-dom": "^0.9.6"
+    "zeed-dom": "^0.9.7"
   },
   "devDependencies": {
     "jest": "^27.0.6",

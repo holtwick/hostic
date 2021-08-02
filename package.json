@@ -58,7 +58,7 @@
     "source-map-support": "^0.5.19",
     "uuid": "^8.3.2",
     "yaml": "^1.10.2",
-    "zeed-dom": "^0.9.4"
+    "zeed-dom": "^0.9.6"
   },
   "devDependencies": {
     "jest": "^27.0.6",

@@ -1,6 +1,6 @@
 {
   "name": "hostic",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "description": "Yet another static web site generator",
   "main": "src/index.js",
   "scripts": {

@@ -12,22 +12,27 @@ export async function checkLinks(site) {
       let { type } = routes.get(path)
       if (type === TYPE_HTML) {
         let { content } = await routes.render(path, { site })
-        let body = parseHTML(content)
-        body.querySelectorAll("a[href]").forEach((el) => {
-          if (el.getAttribute("data-ignore-check") == null) {
-            let href = el.getAttribute("href")
-            if (href.startsWith("/") && !href.startsWith("/goto/")) {
-              href = href.replace(/[#?].*$/, "")
-              if (!site.routes.has(href)) {
-                warn(
-                  `Invalid link to ${href} "${el.textContent}" (found in ${path})`
-                )
-                issues += 1
-                // incrementErrorCount()
+        try {
+          let body = parseHTML(content)
+          body.querySelectorAll("a[href]").forEach((el) => {
+            if (el.getAttribute("data-ignore-check") == null) {
+              let href = el.getAttribute("href")
+              if (href.startsWith("/") && !href.startsWith("/goto/")) {
+                href = href.replace(/[#?].*$/, "")
+                if (!site.routes.has(href)) {
+                  warn(
+                    `Invalid link to ${href} "${el.textContent}" (found in ${path})`
+                  )
+                  issues += 1
+                  // incrementErrorCount()
+                }
               }
             }
-          }
-        })
+          })
+        } catch (err) {
+          warn(`err parse: ${path}`)
+          // console.log("\n\n" + path + ":\n\n" + content)
+        }
       }
     } catch (err) {
       error(err)

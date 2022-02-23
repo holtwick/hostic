@@ -1,6 +1,6 @@
 {
   "name": "hostic",
-  "version": "0.15.8",
+  "version": "0.15.9",
   "description": "Yet another static web site generator",
   "main": "src/index.js",
   "scripts": {
@@ -40,28 +40,28 @@
   },
   "homepage": "https://github.com/holtwick/hostic",
   "dependencies": {
-    "chalk": "^5.0.0",
-    "chokidar": "^3.5.3",
-    "debug": "^4.3.3",
-    "esbuild": "^0.14.23",
-    "express": "^4.17.3",
-    "highlight.js": "11.4.0",
-    "image-size": "^1.0.1",
-    "marked": "^4.0.12",
+    "chalk": "^4.1.2",
+    "chokidar": "^3.5.2",
+    "debug": "^4.3.2",
+    "esbuild": "^0.13.13",
+    "express": "^4.17.1",
+    "highlight.js": "^11.3.1",
+    "image-size": "^1.0.0",
+    "marked": "<4.0.0",
     "mime-types": "^2.1.34",
-    "minimatch": "^5.0.0",
-    "postcss": "^8.4.6",
-    "postcss-load-config": "^3.1.3",
-    "socket.io": "^4.4.1",
-    "socket.io-client": "^4.4.1",
-    "source-map-support": "^0.5.21",
+    "minimatch": "^3.0.4",
+    "postcss": "^8.3.11",
+    "postcss-load-config": "^3.1.0",
+    "socket.io": "^4.3.2",
+    "socket.io-client": "^4.3.2",
+    "source-map-support": "^0.5.20",
     "uuid": "^8.3.2",
     "yaml": "^1.10.2",
-    "zeed-dom": "^0.9.21"
+    "zeed-dom": "^0.9.23"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
-    "prettier": "^2.5.1"
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1"
   },
   "engines": {
     "node": ">=12"

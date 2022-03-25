@@ -82,13 +82,15 @@ async function writeStatic({ site, time } = {}) {
   await writeRoutes(excludes)
 
   // Pass 2: Checks
-  print(blue.bold("\nPASS 3 - Checks\n"))
-  for (let check of site.checks) {
-    let result = await check(site)
-    if (result?.success) {
-      print(`✅ ${result.name}`)
-    } else {
-      print(red(`${result.name} ... failed with ${result.issues} issues\n`))
+  if (!!process.env.HOSTIC_CHECK) {
+    print(blue.bold("\nPASS 3 - Checks\n"))
+    for (let check of site.checks) {
+      let result = await check(site)
+      if (result?.success) {
+        print(`✅ ${result.name}`)
+      } else {
+        print(red(`${result.name} ... failed with ${result.issues} issues\n`))
+      }
     }
   }
 

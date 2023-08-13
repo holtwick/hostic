@@ -22,7 +22,8 @@ export function absolute({
           e.setAttribute("href", href.substr(site.baseURL.length))
         } else if (targetBlank) {
           e.setAttribute("target", "_blank")
-          e.setAttribute("rel", "noopener noreferrer")
+          if (!e.getAttribute("rel"))
+            e.setAttribute("rel", "noopener noreferrer")
           e.classList.add("external")
         }
       }

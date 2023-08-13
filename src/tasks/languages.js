@@ -1,6 +1,7 @@
 export function languages(site) {
   const baseURL = site.baseURL || "/"
-
+  const xDefaultPath = '/en/'
+  
   // TODO: more generic!
 
   // Fix alternates
@@ -15,7 +16,7 @@ export function languages(site) {
         context.hrefOtherLanguage = "/de/" + slug
         context.alt = {
           de: baseURL + "/de/" + slug,
-          "*": baseURL + "/" + slug, // Redirection based on
+          "*": baseURL + xDefaultPath + slug, // Redirection based on
         }
       }
     } else if (path.startsWith("/de/")) {
@@ -25,7 +26,7 @@ export function languages(site) {
         context.hrefOtherLanguage = "/en/" + slug
         context.alt = {
           en: baseURL + "/en/" + slug,
-          "*": baseURL + "/" + slug, // Redirection based on
+          "*": baseURL + xDefaultPath + slug, // Redirection based on
         }
       }
     }
